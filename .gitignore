@@ -28,3 +28,5 @@ infrastructure/docker/oradb18xe/_binaries_tmp/*
 !infrastructure/docker/oradb18xe/_binaries_tmp/note_tmp.md
 infrastructure/docker/oradb18xe/_binaries/*
 !infrastructure/docker/oradb18xe/_binaries/note.md
+
+# test
