@@ -29,4 +29,6 @@ infrastructure/docker/oradb18xe/_binaries_tmp/*
 infrastructure/docker/oradb18xe/_binaries/*
 !infrastructure/docker/oradb18xe/_binaries/note.md
 
-# test
+# providers
+provider/*.env
+!provider/example-*.env
