@@ -1,0 +1,30 @@
+# Settings related to VSCode should be kept private
+**.vscode
+
+# Dependency directories
+node_modules
+jspm_packages
+
+# Optional npm cache directory
+.npm
+
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# no backups inside git
+machines/*/last_backup.sql
+machines/*/*_backup_*.sql
+machines/*/*_backup_*.dmp
+
+# binaries to copy when
+infrastructure/docker/appsrv/_binaries_tmp/*
+!infrastructure/docker/appsrv/_binaries_tmp/note_tmp.md
+infrastructure/docker/appsrv/_binaries/*
+!infrastructure/docker/appsrv/_binaries/note.md
+
+infrastructure/docker/oradb18xe/_binaries_tmp/*
+!infrastructure/docker/oradb18xe/_binaries_tmp/note_tmp.md
+infrastructure/docker/oradb18xe/_binaries/*
+!infrastructure/docker/oradb18xe/_binaries/note.md

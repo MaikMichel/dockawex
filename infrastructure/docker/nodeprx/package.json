@@ -1,0 +1,13 @@
+{
+    "name": "apiproxy",
+    "version": "1.0.0",
+    "description": "Proxy for accessing external APIs.",
+    "main": "app.js",
+    "author": "Maik Michel",
+    "private": true,
+    "license": "MIT",
+    "dependencies": {
+        "express": "^4.16.3",
+        "http-proxy-middleware": "^0.19.1"
+    }
+}

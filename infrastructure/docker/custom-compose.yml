@@ -1,0 +1,69 @@
+# AWEX services
+version: '3.7'
+
+# mostly we define where to get our files and how are they specific named
+# and define some user data
+services:
+  oradb:
+    build:
+      args:
+        - DOWNLOAD_URL=${DOWNLOAD_URL}
+        - FILE_DB=${FILE_DB}
+        - DB_PASSWORD=${DB_PASSWORD}
+    container_name: ${CONTAINER_PREFIX}_oradb_1
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - TZ=${TIME_ZONE}
+
+  appsrv:
+    build:
+      args:
+        - DOWNLOAD_URL=${DOWNLOAD_URL}
+        - FILE_JASPER=${FILE_JASPER}
+        - FILE_JRE=${FILE_JRE}
+        - FILE_JRE_VERSION=${FILE_JRE_VERSION}
+        - FILE_ORDS=${FILE_ORDS}
+        - FILE_TOMCAT=${FILE_TOMCAT}
+        - FILE_APEX=${FILE_APEX}
+        - FILE_CLIENT=${FILE_CLIENT}
+        - FILE_SQLPLUS=${FILE_SQLPLUS}
+        # Pwd used in tomcat
+        - TOM_PASSWORD=${TOM_PASSWORD}
+    container_name: ${CONTAINER_PREFIX}_appsrv_1
+    environment:
+      # this is used for sys
+      - DB_PASSWORD=${DB_PASSWORD}
+      # all ORDS passes
+      - ORDS_PASSWORD=${ORDS_PASSWORD}
+      # now define user and pwd for jasper
+      - REP_USER=${REP_USER}
+      - REP_PASSWORD=${REP_PASSWORD}
+      # enable JRI application info page or not
+      - REP_ENABLE_INFOPAGE=${REP_ENABLE_INFOPAGE}
+      # what APEX user we will use (Version)
+      - APEX_USER=${APEX_USER}
+      # admin email for internal workspace
+      - INTERNAL_MAIL=${INTERNAL_MAIL}
+      # email settings for instance
+      - SMTP_HOST_ADDRESS=${SMTP_HOST_ADDRESS}
+      - SMTP_FROM=${SMTP_FROM}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      # TimeZone
+      - TZ=${TIME_ZONE}
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+      # during test comment that out because letsencrypt does not allow
+      # more than 5 calls per week
+      #- LETSENCRYPT_TEST=true
+      # with that info we say hello to our dyndns-service
+      - DDNS_USER=${DDNS_USER}
+      - DDNS_PASSWORD=${DDNS_PASSWORD}
+      - DDNS_URL=${DDNS_URL}
+
+  nodeprx:
+    container_name: ${CONTAINER_PREFIX}_nodeprx_1
+
+  # portainer:
+  #   container_name: ${CONTAINER_PREFIX}_portainer_1

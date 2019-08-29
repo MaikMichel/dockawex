@@ -1,0 +1,42 @@
+# DAXE services
+version: '3.7'
+
+# Use nginx-proxy and listen to containers to come up
+# proxy them when ENVs are defined and let them certify
+# by letsencrypt
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    labels:
+        com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+    container_name: nginx-proxy
+    depends_on:
+      - appsrv
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - vhostvol:/etc/nginx/vhost.d
+      - htmlvol:/usr/share/nginx/html
+      - '/etc/nginx/certs:/etc/nginx/certs:ro'
+      - '/var/run/docker.sock:/tmp/docker.sock:ro'
+    restart: always
+
+  letsencrypt-nginx-proxy:
+    image: 'jrcs/letsencrypt-nginx-proxy-companion'
+    container_name: letsencrypt-nginx-proxy
+    depends_on:
+      - nginx-proxy
+    volumes:
+      - vhostvol:/etc/nginx/vhost.d
+      - htmlvol:/usr/share/nginx/html
+      - '/etc/nginx/certs:/etc/nginx/certs'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    restart: always
+
+# Define some volumes
+volumes:
+  vhostvol:
+    driver: local
+  htmlvol:
+    driver: local

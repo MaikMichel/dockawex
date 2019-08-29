@@ -1,0 +1,68 @@
+# DAXE services
+version: '3.7'
+
+services:
+  # Oracle XE build by Dockerfile inside ./oradb
+  oradb:
+    build:
+      context: ./oradb18xe
+    container_name: oradb
+    # mem_limit: 2g
+    ports:
+      - 1521:1521
+    volumes:
+      - dbstore:/opt/oracle/oradata
+    restart: always
+
+  # Applicationserver (Tomcat) with deploy ORDS and JasperReportIntegation
+  # At first start:
+  # - wait for DB to come up and check if APEX040000 was removed
+  # - install APEX
+  # - install, configure ORDS , JRI and deploy it
+  appsrv:
+    build:
+      context: ./appsrv
+    container_name: appsrv
+    environment:
+        - DB_HOST=oradb
+        - VIRTUAL_PORT=8080
+    ports:
+      - 8080:8080
+    volumes:
+      - dbstore:/opt/oracle/oradata
+      - repstore:/u01/jasper/reports
+      - appstore:/u01/apps
+    restart: always
+    depends_on:
+      - oradb
+
+  # NodeProxy to use from APEX in order to speak with to the world
+  nodeprx:
+    build:
+      context: ./nodeprx
+    container_name: nodeprx
+    ports:
+      - 3000:3000
+    restart: always
+    depends_on:
+      - oradb
+
+  # Portainer
+  # portainer:
+  #   image: portainer/portainer
+  #   volumes:
+  #     - portainer_data:/data
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   ports:
+  #     - "9000:9000"
+  #   restart: unless-stopped
+
+# Define some volumes
+volumes:
+  dbstore:
+    driver: local
+  repstore:
+    driver: local
+  appstore:
+    driver: local
+  portainer_data:
