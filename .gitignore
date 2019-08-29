@@ -32,3 +32,7 @@ infrastructure/docker/oradb18xe/_binaries/*
 # providers
 provider/*.env
 !provider/example-*.env
+
+#machines
+machines/*
+!machines/_template
