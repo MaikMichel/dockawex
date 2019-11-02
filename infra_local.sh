@@ -36,10 +36,13 @@ linux*)
 darwin*)
   SWITCH="no_switch"
 ;;
+mingw64_nt-10*)
+  SWITCH="no_switch"
+;;
 *)
   echo "executing defaults "
 ;;
 esac
 
 # call remote
-./setup_remote.sh dev ${SWITCH} doesntmatter ${EC2_NAME} ${COMMAND} ${OPTION}
+./infra_remote.sh dev ${SWITCH} doesntmatter ${EC2_NAME} ${COMMAND} ${OPTION}
