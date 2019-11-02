@@ -2,30 +2,33 @@
 
 [![APEX Community](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/78c5adbe/badges/apex-community-badge.svg)]() [![APEX Tool](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/b7e95341/badges/apex-tool-badge.svg)]() [![APEX 18.2](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/2fee47b7/badges/apex-18_2-badge.svg)]() [![APEX Built with Love](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/7919f913/badges/apex-love-badge.svg)]()
 
-#TODO hier fehlt Text
+With DOCKAWEX you can easily create your local APEX development environment consisting of Oracle Database 18c XE, Tomcat with ORDS and an additional node proxy. Additionally you have the possibility to remotely build a container architecture for your APEX project via docker-machine and the included drivers. Here your containers will be additionally secured via Let's Encrypt and nginx and made known in the cloud.
+
 
 ---
 
 ## System Requirements
 
 - [Docker](https://www.docker.com)
-- [AWS-CLI](https://aws.amazon.com/de/cli/)
+- [Docker-Compose](https://www.docker.com)
+- [AWS-CLI](https://aws.amazon.com/de/cli/) (optional)
 
 ## Download Software
 
 For licensing reasons, you must host or provide the software packages to be installed yourself.
-#TODO aktualisieren
+
 
 File                                           | What / Link
 ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-oracle-xe_11.2.0-1.0_amd64.deb                 | http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html?ssSourceSiteId=null <br/>- Oracle DB 11.2 XE<br/>- cause I use Ubuntu, you have to alienate the rpm to a deb (debian-image)<br/>you can download is from here:<br/> https://github.com/araczkowski/docker-oracle-apex-ords/raw/master/files/oracle-xe_11.2.0-1.0_amd64.debaa<br/>https://github.com/araczkowski/docker-oracle-apex-ords/raw/master/files/oracle-xe_11.2.0-1.0_amd64.debab<br/>https://github.com/araczkowski/docker-oracle-apex-ords/raw/master/files/oracle-xe_11.2.0-1.0_amd64.debac<br/>and merge the files to oracle-xe_11.2.0-1.0_amd64.deb
+oracle-database-xe-18c-1.0-1.x86_64.rpm        | https://www.oracle.com/database/technologies/xe-downloads.html <br/>- Oracle DB 18c XE
 jre-8u171-linux-x64.tar.gz                     | http://download.oracle.com/otn/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/jdk-8u171-linux-x64.tar.gz <br/>- JRE which will run tomcat
 apache-tomcat-8.5.31.tar.gz                    | http://mirror.23media.de/apache/tomcat/tomcat-8/v8.5.31/bin/apache-tomcat-8.5.31.tar.gz <br/>- Applicationserver, here will ORDS and JasperReportIntegration installed to
-ords.18.3.0.270.1456.zip                       | https://www.oracle.com/technetwork/developer-tools/rest-data-services/downloads/index.html <br/>- Oracle REST Data Services, will provide access to APEX
+ords-19.2.0.199.1647.zip                       | https://www.oracle.com/database/technologies/appdev/rest.html <br/>- Oracle REST Data Services, will provide access to APEX
 JasperReportsIntegration-2.4.0.0.zip           | http://www.opal-consulting.de/downloads/free_tools/JasperReportsIntegration/2.4.0/JasperReportsIntegration-2.4.0.0.zip <br/>- free tool to run your jasper-files
-apex_18.2.zip                                  | https://www.oracle.com/technetwork/developer-tools/apex/downloads/index.html <br/>- APEX complete
+apex_19.2.zip                                  | https://www.oracle.com/tools/downloads/apex-v191-downloads.html <br/>- APEX complete
 instantclient-basic-linux.x64-12.1.0.2.0.zip   | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- Clientssoftware, to connect to oracle db
 instantclient-sqlplus-linux.x64-12.1.0.2.0.zip | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- SQLPlus<br/>- install APEX and run your scripts and deployments
+sqlcl-19.2.1.206.1649.zip                      | https://www.oracle.com/tools/downloads/sqldev-v192-downloads.html <br/>- SQLCL
 
 When you are building against **local** machine, you can pack all files into the directories called "_binaries"
 ```shell
@@ -34,32 +37,30 @@ deployment/docker/apex_deployment/_binaries
   instantclient-sqlplus-linux.x64-12.1.0.2.0.zip
 infrastructure/docker/appsrv/_binaries
   apache-tomcat-8.5.31.tar.gz
-  apex_18.2.zip
+  apex_19.2.zip
   instantclient-basic-linux.x64-12.1.0.2.0.zip
   instantclient-sqlplus-linux.x64-12.1.0.2.0.zip
   JasperReportsIntegration-2.4.0.0.zip
   jre-8u171-linux-x64.tar.gz
-  ords-18.3.0.270.1456.zip
+  ords-19.2.0.199.1647.zip
 infrastructure/docker/oradb/_binaries
-  oracle-xe_11.2.0-1.0_amd64.deb
+  oracle-database-xe-18c-1.0-1.x86_64.rpm
 ```
 From here all files are copied into the respective image.  
 Otherwise when building against remote machine, load the files into a directory of your choice (your website, S3, ...) from where they must be accessible via http(s).
 
 ## Local installation as development environment
 
-#TODO ANpassen des Text
-The configurations of the individual machines are stored in the "machines/*" directory. Here, each directory represents a machine. The local machine is also stored here. It is located in the folder **default**. Each machine folder contains a docker-compose.yml file "custom-compose.yml" and several `*.env` files containing the settings for each application to be distributed.
+The configurations of the individual machines are stored in the "machines/*" directory. Here, each directory represents a machine. The local machine is also stored here. It is located in the folder **default**. Each directory must contain a .env - file. Here you have to store some configurations. Feel free to copy the **_template**-folder, rename it and change vars as you need.
 
 
-### 2. Call script **setup_local.sh** to manage your local setup
-#TODO Test anpassen
+### 2. Call script **infra_local.sh** to manage your local setup
 
-1. change your working directory to the machines path: ```cd dockawex/machines```
-2. build images: ```dockawex/machines$> ./setup_local.sh build```
-3. start container: ```dockawex/machines$> ./setup_local.sh start```
+1. change your working directory to dockawex: ```cd dockawex```
+2. build images: ```dockawex$> ./infra_local.sh build```
+3. start container: ```dockawex$> ./infra_local.sh start```
 
-> More parameters will be displayed if you omit the parameters. ```dockawex/machines$> ./awex_local.sh```
+> More parameters will be displayed if you omit the parameters. ```dockawex$> ./infra_local.sh```
 
 ready...
 At http://localhost:8080/ords (or 192.168.99.100/ords when using docker-toolbox) APEX is waiting for you
