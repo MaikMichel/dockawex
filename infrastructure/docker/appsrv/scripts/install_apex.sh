@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export SQLPLUS=/instantclient_12_1/sqlplus
+export SQLPLUS=/${FILE_INSTANT_CLIENT_VERION}/sqlplus
 SQLPLUS_ARGS="sys/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_SID} as sysdba"
 target_dir=/u01/apps
 
@@ -46,6 +46,17 @@ verify(){
   fi
 }
 
+create_apex_tablespace(){
+  cd ${target_dir}/apex
+
+  echo "Creating tablespace APEX"
+
+  $SQLPLUS -S $SQLPLUS_ARGS <<!  
+  CREATE TABLESPACE APEX DATAFILE '/opt/oracle/oradata/XE/XEPDB1/apex01.dbf' SIZE 100M AUTOEXTEND ON NEXT 10M;
+!
+  echo "-----------------------------------------------------------------"
+
+}
 
 apex_install(){
   cd ${target_dir}/apex
@@ -53,7 +64,7 @@ apex_install(){
   echo "Installing apex..."
 
   $SQLPLUS -S $SQLPLUS_ARGS <<!
-  @apexins SYSAUX SYSAUX TEMP /i/
+  @apexins APEX APEX TEMP /i/
 !
   echo "-----------------------------------------------------------------"
 
@@ -224,8 +235,18 @@ unzip_apex(){
   #dpkg-reconfigure -f noninteractive tzdata
 }
 
+
+set_pwd_profile () {
+    $SQLPLUS -S $SQLPLUS_ARGS <<!
+    ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
+!
+}
+
+
 verify
 unzip_apex
-
+create_apex_tablespace
 apex_install
 apex_config
+set_pwd_profile
+

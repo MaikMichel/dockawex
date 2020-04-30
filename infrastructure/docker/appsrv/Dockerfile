@@ -3,9 +3,6 @@ FROM ubuntu:14.04
 # needed to install correctly
 ENV DEBIAN_FRONTEND noninteractive
 
-# here is our client
-ENV LD_LIBRARY_PATH /instantclient_12_1
-
 # here are our db connection values
 ENV DB_PASSWORD=${DB_PASSWORD:-secret} \
     DB_HOST=${DB_HOST:-localhost} \
@@ -24,12 +21,6 @@ ENV SMTP_HOST_ADDRESS=${SMTP_HOST_ADDRESS} \
 ENV ORDS_PASSWORD ${ORDS_PASSWORD:-secret}
 ARG TOM_PASSWORD
 
-# vars when using jasper-report-integration
-ENV REP_USER=${REP_USER:-jasper} \
-    REP_HOST=${REP_HOST:-oradb_cnt} \
-    REP_PASSWORD=${REP_PASSWORD:-secret} \
-    REP_ENABLE_INFOPAGE=${REP_HIDE_INFOPAGE:-true}
-
 RUN apt-get update && apt-get install -y libaio1 unzip curl locales nano
 RUN locale-gen de_DE.UTF-8
 # NLS
@@ -45,7 +36,6 @@ EXPOSE 8080
 ARG DOWNLOAD_URL
 ONBUILD RUN if [ -z "${DOWNLOAD_URL}" ]; then echo "DOWNLOAD_URL NOT SET - ERROR"; exit 1; else : ; fi
 
-ARG FILE_JASPER=${FILE_JASPER}
 ARG FILE_JRE=${FILE_JRE:-}
 ARG FILE_JRE_VERSION=${FILE_JRE:-}
 ARG FILE_ORDS=${FILE_ORDS}
@@ -53,16 +43,19 @@ ARG FILE_TOMCAT=${FILE_TOMCAT}
 ARG FILE_APEX=${FILE_APEX}
 ARG FILE_CLIENT=${FILE_CLIENT}
 ARG FILE_SQLPLUS=${FILE_SQLPLUS}
+ARG FILE_INSTANT_CLIENT_VERION=${FILE_INSTANT_CLIENT_VERION}
 
-ENV FILE_JASPER=${FILE_JASPER} \
-    FILE_JRE=${FILE_JRE} \
+ENV FILE_JRE=${FILE_JRE} \
     FILE_JRE_VERSION=${FILE_JRE_VERSION} \
     FILE_ORDS=${FILE_ORDS} \
     FILE_TOMCAT=${FILE_TOMCAT} \
     FILE_APEX=${FILE_APEX} \
     FILE_CLIENT=${FILE_CLIENT} \
-    FILE_SQLPLUS=${FILE_SQLPLUS}
+    FILE_SQLPLUS=${FILE_SQLPLUS} \
+    FILE_INSTANT_CLIENT_VERION=${FILE_INSTANT_CLIENT_VERION}
 
+# here is our client
+ENV LD_LIBRARY_PATH /${FILE_INSTANT_CLIENT_VERION}
 
 # all installation files
 COPY scripts /scripts

@@ -36,3 +36,6 @@ provider/*.env
 #machines
 machines/*
 !machines/_template
+
+#binary-files
+files/*

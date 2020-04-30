@@ -18,8 +18,7 @@ services:
   appsrv:
     build:
       args:
-        - DOWNLOAD_URL=${DOWNLOAD_URL}
-        - FILE_JASPER=${FILE_JASPER}
+        - DOWNLOAD_URL=${DOWNLOAD_URL}        
         - FILE_JRE=${FILE_JRE}
         - FILE_JRE_VERSION=${FILE_JRE_VERSION}
         - FILE_ORDS=${FILE_ORDS}
@@ -27,6 +26,7 @@ services:
         - FILE_APEX=${FILE_APEX}
         - FILE_CLIENT=${FILE_CLIENT}
         - FILE_SQLPLUS=${FILE_SQLPLUS}
+        - FILE_INSTANT_CLIENT_VERION=${FILE_INSTANT_CLIENT_VERION}
         # Pwd used in tomcat
         - TOM_PASSWORD=${TOM_PASSWORD}
     container_name: ${CONTAINER_PREFIX}_appsrv_1
@@ -34,12 +34,7 @@ services:
       # this is used for sys
       - DB_PASSWORD=${DB_PASSWORD}
       # all ORDS passes
-      - ORDS_PASSWORD=${ORDS_PASSWORD}
-      # now define user and pwd for jasper
-      - REP_USER=${REP_USER}
-      - REP_PASSWORD=${REP_PASSWORD}
-      # enable JRI application info page or not
-      - REP_ENABLE_INFOPAGE=${REP_ENABLE_INFOPAGE}
+      - ORDS_PASSWORD=${ORDS_PASSWORD}      
       # what APEX user we will use (Version)
       - APEX_USER=${APEX_USER}
       # admin email for internal workspace
@@ -64,6 +59,8 @@ services:
 
   nodeprx:
     container_name: ${CONTAINER_PREFIX}_nodeprx_1
-
-  # portainer:
-  #   container_name: ${CONTAINER_PREFIX}_portainer_1
+    
+  portainer:
+    container_name: ${CONTAINER_PREFIX}_portainer_1
+    command: --admin-password ${PORTAINER_PASS}
+    

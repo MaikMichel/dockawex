@@ -14,7 +14,7 @@ services:
       - dbstore:/opt/oracle/oradata
     restart: always
 
-  # Applicationserver (Tomcat) with deploy ORDS and JasperReportIntegation
+  # Applicationserver (Tomcat) with deploy ORDS
   # At first start:
   # - wait for DB to come up and check if APEX040000 was removed
   # - install APEX
@@ -29,12 +29,17 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - dbstore:/opt/oracle/oradata
-      - repstore:/u01/jasper/reports
+      - dbstore:/opt/oracle/oradata      
       - appstore:/u01/apps
     restart: always
     depends_on:
       - oradb
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ords/ || exit 1
+      interval: 5m
+      timeout: 30s
+      retries: 10
+      start_period: 45m
 
   # NodeProxy to use from APEX in order to speak with to the world
   nodeprx:
@@ -48,21 +53,20 @@ services:
       - oradb
 
   # Portainer
-  # portainer:
-  #   image: portainer/portainer
-  #   volumes:
-  #     - portainer_data:/data
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   ports:
-  #     - "9000:9000"
-  #   restart: unless-stopped
+  portainer:
+    image: portainer/portainer
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9000:9000"
+    restart: unless-stopped    
 
 # Define some volumes
 volumes:
   dbstore:
-    driver: local
-  repstore:
-    driver: local
+    driver: local  
   appstore:
     driver: local
   portainer_data:
+    driver: local

@@ -19,3 +19,8 @@ downloadFiles () {
 if [ ! -f ${INSTALL_DIR}/${FILE_DB} ]; then
   downloadFiles
 fi
+
+# if it still not exists 
+if [ ! -f ${INSTALL_DIR}/${FILE_DB} ]; then
+  exit 1
+fi

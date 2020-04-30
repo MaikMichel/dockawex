@@ -80,15 +80,14 @@ then
   echo "export DOWNLOAD_URL=https://files-will-be-downloaded-from-here" >> "machines/${MACHINE_NAME}/.env"
   echo "" >> "machines/${MACHINE_NAME}/.env"
   echo "export FILE_DB=oracle-database-xe-18c-1.0-1.x86_64.rpm" >> "machines/${MACHINE_NAME}/.env"
-  echo "export FILE_JASPER=JasperReportsIntegration-2.4.0.0.zip" >> "machines/${MACHINE_NAME}/.env"
-  echo "export FILE_JRE=jre-8u171-linux-x64.tar.gz" >> "machines/${MACHINE_NAME}/.env"
-  echo "export FILE_JRE_VERSION=jre1.8.0_171" >> "machines/${MACHINE_NAME}/.env"
-  echo "export FILE_ORDS=ords-19.1.0.092.1545.zip" >> "machines/${MACHINE_NAME}/.env"
-  echo "export FILE_TOMCAT=apache-tomcat-8.5.31.tar.gz" >> "machines/${MACHINE_NAME}/.env"
-  echo "export FILE_APEX=apex_19.1.zip" >> "machines/${MACHINE_NAME}/.env"
-  echo "export FILE_CLIENT=instantclient-basic-linux.x64-12.1.0.2.0.zip" >> "machines/${MACHINE_NAME}/.env"
-  echo "export FILE_SQLPLUS=instantclient-sqlplus-linux.x64-12.1.0.2.0.zip" >> "machines/${MACHINE_NAME}/.env"
-  echo "export FILE_SQLCL=sqlcl-19.1.0.094.1619.zip" >> "machines/${MACHINE_NAME}/.env"
+  echo "export FILE_JRE=jre-8u251-linux-x64.tar.gz" >> "machines/${MACHINE_NAME}/.env"
+  echo "export FILE_JRE_VERSION=jre1.8.0_251" >> "machines/${MACHINE_NAME}/.env"
+  echo "export FILE_ORDS=ords-19.4.0.352.1226.zip" >> "machines/${MACHINE_NAME}/.env"
+  echo "export FILE_TOMCAT=apache-tomcat-8.5.54.tar.gz" >> "machines/${MACHINE_NAME}/.env"
+  echo "export FILE_APEX=apex_20.1.zip" >> "machines/${MACHINE_NAME}/.env"
+  echo "export FILE_INSTANT_CLIENT_VERION=instantclient_19_6"
+  echo "export FILE_CLIENT=instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip" >> "machines/${MACHINE_NAME}/.env"
+  echo "export FILE_SQLPLUS=instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip" >> "machines/${MACHINE_NAME}/.env"
   echo "" >> "machines/${MACHINE_NAME}/.env"
   echo "" >> "machines/${MACHINE_NAME}/.env"
   echo "export DB_SID=xepdb1" >> "machines/${MACHINE_NAME}/.env"
@@ -96,11 +95,7 @@ then
   echo "export TOM_PASSWORD=" >> "machines/${MACHINE_NAME}/.env"
   echo "export ORDS_PASSWORD=" >> "machines/${MACHINE_NAME}/.env"
   echo "" >> "machines/${MACHINE_NAME}/.env"
-  echo "export REP_USER=jasper" >> "machines/${MACHINE_NAME}/.env"
-  echo "export REP_PASSWORD=" >> "machines/${MACHINE_NAME}/.env"
-  echo "export REP_ENABLE_INFOPAGE=true" >> "machines/${MACHINE_NAME}/.env"
-  echo "" >> "machines/${MACHINE_NAME}/.env"
-  echo "export APEX_USER=APEX_190100" >> "machines/${MACHINE_NAME}/.env"
+  echo "export APEX_USER=APEX_200100" >> "machines/${MACHINE_NAME}/.env"
   echo "export INTERNAL_MAIL=admin.mail@somewhere.io" >> "machines/${MACHINE_NAME}/.env"
   echo "" >> "machines/${MACHINE_NAME}/.env"
   echo "export VIRTUAL_HOST=domain.of-your-apps.com" >> "machines/${MACHINE_NAME}/.env"
@@ -199,6 +194,8 @@ build_images() {
 
 start_services() {
   switch_to_machine
+  
+  export PORTAINER_PASS=$(docker run --rm httpd:2.4-alpine htpasswd -nbB admin ${PORTAINER_PWD} | cut -d ":" -f 2)
 
   # startup containers
   echo "Building starting containers ${OPTION} for machine: ${MACHINE_NAME}"
