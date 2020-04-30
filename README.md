@@ -82,6 +82,15 @@ export PORTAINER_PWD=SecurePwd123
 export APEX_USER=APEX_200100
 export INTERNAL_MAIL=your.admin-mail@somewhere.com
 
+# mail properties
+export SMTP_HOST_ADDRESS=your.smtp-server.com
+export SMTP_FROM=default-from-name
+export SMTP_USERNAME=your-user
+export SMTP_PASSWORD=and-pwd
+
+
+####### Following stuff is only used when using remote configuration #######
+
 # Point to and certificate 
 export VIRTUAL_HOST=your.domain.com
 export LETSENCRYPT_HOST=your.domain.com
@@ -96,11 +105,6 @@ export DDNS_USER=your-ddns-user
 export DDNS_PASSWORD=with-password-when-using-curl
 export DDNS_URL=ddns.server.org
 
-# mail properties
-export SMTP_HOST_ADDRESS=your.smtp-server.com
-export SMTP_FROM=default-from-name
-export SMTP_USERNAME=your-user
-export SMTP_PASSWORD=and-pwd
 ```
 
 ### 2. Call script **infra_local.sh** to manage your local setup
