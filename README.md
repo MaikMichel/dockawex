@@ -76,7 +76,6 @@ export DB_SID=xepdb1
 export DB_PASSWORD=SecurePwd123
 export TOM_PASSWORD=SecurePwd123
 export ORDS_PASSWORD=SecurePwd123
-export PORTAINER_PWD=SecurePwd123
 
 # APEX properties
 export APEX_USER=APEX_200100
@@ -95,10 +94,13 @@ export SMTP_PASSWORD=and-pwd
 export VIRTUAL_HOST=your.domain.com
 export LETSENCRYPT_HOST=your.domain.com
 export LETSENCRYPT_EMAIL=your.admin-mail@somewhere.com
-# during test comment that out because letsencrypt does not allow
+# during test set to true because letsencrypt does not allow
 # more than 5 calls per week
-#- LETSENCRYPT_TEST=true
+export LETSENCRYPT_TEST=false
 # with that info we say hello to our dyndns-service
+
+# APEX Appliction-Number to redirect on /
+APP_NUM=100
 
 # curl to
 export DDNS_USER=your-ddns-user
@@ -147,7 +149,7 @@ apex_mail.send(p_from => '${SMTP_FROM}'
 | Typ              | Link |
 |------------------|-------------------------------------------|
 | APEX             | http://localhost:8080/ords                |
-| Portainer        | http://localhost:9000                     |
+| DOOZLE           | http://localhost:9000                     |
 | SQLDeveloper Web | http://localhost:8080/ords/sql-developer  |
 | DB               | \<user>/\<pass>@localhost:1521/xepdb1     |
 
@@ -157,14 +159,28 @@ apex_mail.send(p_from => '${SMTP_FROM}'
 
 ## Remote installation for the public
 
+> docker-machine must be available on your client machine
+
+On Windows 10:
+```bash
+$: if [[ ! -d "$HOME/bin" ]]; then mkdir -p "$HOME/bin"; fi && \
+curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-Windows-x86_64.exe > "$HOME/bin/docker-machine.exe" && \
+chmod +x "$HOME/bin/docker-machine.exe"
+```
+
+Otherwise visit: https://github.com/docker/machine/releases/ for further instructions
+
+---
+When using AWS:
+
 ### Prerequisite [Create an AWS account and authorized user](_docs/prepare_aws.md)
 
-### 1. Modify AWS Settings
+### 1a. Modify AWS Settings
 
 After you have installed and configured aws-cli and created an IAM user, you can now write your account parameters to an environment file **account-alias.env**.
 
-1. copy the file _template.env and name it descriptive e.g. your-aws-settings.env
-2. Change following parameters:
+1. place a file inside provider subdirectory (provider/my-aws-settings.env).
+2. Set content to:
 
 ```bash
 ACCESS_KEY_ID=<Your AWS Access Key ID>
@@ -172,23 +188,77 @@ SECRET_ACCESS_KEY=<Your AWS Secret Access Key>
 VPC_ID=<Your AWS VPC ID>
 ```
 
+When using DigitalOcean:
+
+### Prerequite [Create an DigitalOcean Account and API Token]
+
+### 1b.  Modify DO Settings
+
+After you have configured an API-TOKEN in DO, you can now write your account parameters to an environment file **account-alias.env**.
+
+1. place a file inside provider subdirectory (provider/my-do-settings.env).
+2. Set the content to:
+
+```bash
+DRIVER_TYPE=OCEAN
+export OCEAN_TOKEN=<your token>
+export OCEAN_TAG=<your tag>
+```
+
+
 ### 2. Create a copy of the directory "_template" an name it descriptive e.g.  your-machine
 
-### 3. Customizing the Infrastructure Settings ```machines/your-machine/custom-compose.yml```
-#TODO: Hier fehlt text
+### 3. Modify environment vars inside machines/your-machine/.env
 
+This is like the local section mention above. Just set your vars.
 
-### 4. Call script **setup_remote.sh** to manage your remote setup
+### 4. Call script **infra_remote.sh** to manage your remote setup
 
-1. change your working directory to the machines path: ```cd dockawex/machines```
-2. build images: ```dockawex/machines$> ./setup_remote.sh your-aws-settings your-machine-name build```
-3. start container: ```dockawex/machines$> ./setup_remote.sh your-aws-settings your-machine-name start```
+1. change your working directory to the machines path: ```cd dockawex```
+2. create machine: ```dockawex$> ./infra_remote.sh full switch provider/your-do-settings.env my-droplet create```
+3. build images: ```dockawex$> ./infra_remote.sh full switch provider/your-do-settings.env my-droplet build```
+4. build images: ```dockawex$> ./infra_remote.sh full switch provider/your-do-settings.env my-droplet start```
 
-> More parameters will be displayed if you omit the parameters. ```awex/machines$> ./awex_remote.sh```
+> More parameters will be displayed if you omit the parameters. ```dockawex$> ./infra_remote.sh```
+
+```bash
+  $ ./infra_remote.sh 
+  Usage ./infra_remote.sh full|dev switch|no_switch machine-prov-file machine-name command
+
+  full|dev
+    > full: all containers (nginx, letsencrypt)
+    > dev:  only db, appsrv and node-proxy
+
+  switch|no_switch
+    > switch: use docker-machine to switch to machine
+    > no_switch: without remote-compose (nginx, letsencrypt)
+
+  machine-prov-file
+    > file used by docker-machine driver (aws, digitalocean)
+      if not exists then no machine will be created
+
+  machine-name
+    > name of ec2-instance / droplet
+
+  command
+    > create > creates only ec2-instance
+    > build  > builds only images
+    > start  > start images / containers
+    > run    > creates, builds and start images / containers
+    > logs   > shows logs by executing logs -f
+    > renew  > forces letsencrypt to renew certificate
+    > list   > list services
+    > config > view compose files
+    > print  > print compose call
+    > stop   > stops services
+    > clear  > clears services
+    > remove > remove machine
+    > exec   > calls compose only and attach params
+```
 
 ready...
 Check https://your-sub.domain.de/ords APEX is waiting ...
-
+> Check https://your-sub.domain.de YOUR APP is waiting (see $APP_NUM)
 
 ---
 # FAQ

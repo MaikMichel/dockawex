@@ -1,5 +1,10 @@
 # Changelog
 
+## 2020-05-05
+
+- Portainer removed
+- dozzle included, but only local
+
 ## 2020-04-30
 
 - Portainer included
