@@ -24,7 +24,7 @@ if [ $# -lt 1 ]; then
 fi
 # default is machine-name for local
 EC2_NAME="default"
-SWITCH="switch_dm"
+SWITCH="switch"
 
 COMMAND=$1
 OPTION=$2

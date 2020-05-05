@@ -3,14 +3,14 @@
 # All Params are required
 if [ $# -lt 5 ]; then
   echo
-  echo "Usage $0 full|dev switch_dm|no_switch machine-prov-file machine-name command"
+  echo "Usage $0 full|dev switch|no_switch machine-prov-file machine-name command"
   echo
   echo "  full|dev "
   echo "    > full: all containers (nginx, lets'encrypt)"
   echo "    > dev:  only db, appsrv and node-proxy"
   echo
-  echo "  switch_dm|no_switch "
-  echo "    > switch_dm: use docker-machine to switch to machine"
+  echo "  switch|no_switch "
+  echo "    > switch: use docker-machine to switch to machine"
   echo "    > no_switch: without remote-compose (nginx, lets'encrypt)"
   echo
   echo "  machine-prov-file "
@@ -18,7 +18,7 @@ if [ $# -lt 5 ]; then
   echo "      if not exists then no machine will be created"
   echo
   echo "  machine-name "
-  echo "    > name of ec2-instance"
+  echo "    > name of ec2-instance / droplet"
   echo
   echo "  command "
   echo "    > create > creates only ec2-instance"
@@ -55,7 +55,7 @@ if [ "${STACK}" == "full" ]
 then
   COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/docker-compose-remote.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
 else
-  COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
+  COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/docker-compose-local.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
 fi
 
 if [ ! -f "machines/${MACHINE_NAME}/.env" ]
@@ -137,8 +137,8 @@ switch_to_machine(){
     echo "No switching $UNAME on ${MACHINE_NAME} detected"
   else
     echo "Switching to machine: ${MACHINE_NAME}"
-    docker-machine env ${MACHINE_NAME}
-    eval $(docker-machine env ${MACHINE_NAME})
+    docker-machine env --shell bash ${MACHINE_NAME}
+    eval $(docker-machine env --shell bash ${MACHINE_NAME})
   fi
 }
 
@@ -152,7 +152,7 @@ create_machine() {
     then
       ${INFRA_PATH}/create_ec2_instance.sh ${ACCESS_KEY_ID} ${SECRET_ACCESS_KEY} ${VPC_ID} ${MACHINE_NAME}
     else
-      ${INFRA_PATH}/create_drp_instance.sh ${OCEAN_TOKEN} ${MACHINE_NAME}
+      ${INFRA_PATH}/create_drp_instance.sh ${OCEAN_TOKEN} ${MACHINE_NAME} ${OCEAN_TAG}
     fi
   else
     echo "Machine $MACHINE_NAME will not be created"
@@ -194,9 +194,7 @@ build_images() {
 
 start_services() {
   switch_to_machine
-  
-  export PORTAINER_PASS=$(docker run --rm httpd:2.4-alpine htpasswd -nbB admin ${PORTAINER_PWD} | cut -d ":" -f 2)
-
+    
   # startup containers
   echo "Building starting containers ${OPTION} for machine: ${MACHINE_NAME}"
   #echo "${COMPOSE_COMMAND} up -d ${OPTION}"
@@ -249,10 +247,6 @@ renew_certificate() {
 
 writenginx() {
   switch_to_machine
-
-	echo "writing nginx configuration --- start"
-  ${COMPOSE_COMMAND} exec nginx-proxy bash -c "echo 'proxy_set_header Origin \"\";' > /etc/nginx/vhost.d/default_location"
-	echo "writing nginx configuration --- end"
 
   ${COMPOSE_COMMAND} restart nginx-proxy
   
