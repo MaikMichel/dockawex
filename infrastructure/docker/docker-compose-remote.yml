@@ -1,10 +1,14 @@
-# DAXE services
+# DOCKAWEX services
 version: '3.7'
 
 # Use nginx-proxy and listen to containers to come up
 # proxy them when ENVs are defined and let them certify
 # by letsencrypt
 services:
+  appsrv:    
+    volumes:
+      - vhostvol:/etc/nginx/vhost.d
+
   nginx-proxy:
     image: jwilder/nginx-proxy:alpine
     labels:

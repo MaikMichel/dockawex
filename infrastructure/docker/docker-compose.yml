@@ -1,4 +1,4 @@
-# DAXE services
+# DOCKAWEX services
 version: '3.7'
 
 services:
@@ -52,21 +52,10 @@ services:
     depends_on:
       - oradb
 
-  # Portainer
-  portainer:
-    image: portainer/portainer
-    volumes:
-      - portainer_data:/data
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - "9000:9000"
-    restart: unless-stopped    
-
+  
 # Define some volumes
 volumes:
   dbstore:
     driver: local  
   appstore:
-    driver: local
-  portainer_data:
-    driver: local
+    driver: local  
