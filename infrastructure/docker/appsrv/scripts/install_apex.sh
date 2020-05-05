@@ -76,11 +76,14 @@ apex_config(){
 
   $SQLPLUS -S $SQLPLUS_ARGS <<!
 
-  alter user APEX_PUBLIC_USER identified by $ORDS_PASSWORD account unlock;
+  Prompt setting PWD for APEX_PUBLIC_USER
+  alter user APEX_PUBLIC_USER identified by "$ORDS_PASSWORD" account unlock;
 
+  Prompt calling apex_rest_config_core
   @apex_rest_config_core @ $ORDS_PASSWORD $ORDS_PASSWORD
 
--- From Joels blog: http://joelkallman.blogspot.ca/2017/05/apex-and-ords-up-and-running-in2-steps.html
+  Prompt setting ACLS
+  -- From Joels blog: http://joelkallman.blogspot.ca/2017/05/apex-and-ords-up-and-running-in2-steps.html
   declare
     l_acl_path varchar2(4000);
     l_apex_schema varchar2(100);
