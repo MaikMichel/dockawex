@@ -24,6 +24,7 @@ mv /scripts/tomcat-users.xml /tomcat/conf
 mv /scripts/tomcat-server.xml /tomcat/conf/server.xml
 mv /scripts/tomcat-web.xml /tomcat/conf/web.xml
 mv /scripts/tomcat-error.jsp /tomcat/conf/error.jsp
+mv /scripts/tomcat-error.jsp /tomcat/webapps/error.jsp
 
 rm -rf /tomcat/webapps/docs
 rm -rf /tomcat/webapps/examples
