@@ -51,7 +51,7 @@ services:
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
       # during test comment that out because letsencrypt does not allow
       # more than 5 calls per week
-      #- LETSENCRYPT_TEST=true
+      - LETSENCRYPT_TEST=${LETSENCRYPT_TEST}
       # with that info we say hello to our dyndns-service
       - DDNS_USER=${DDNS_USER}
       - DDNS_PASSWORD=${DDNS_PASSWORD}
@@ -59,8 +59,4 @@ services:
 
   nodeprx:
     container_name: ${CONTAINER_PREFIX}_nodeprx_1
-    
-  portainer:
-    container_name: ${CONTAINER_PREFIX}_portainer_1
-    command: --admin-password ${PORTAINER_PASS}
     
