@@ -66,6 +66,10 @@ else
   echo "Installing ORACLE ORDS............................"
   ./scripts/install_ords.sh
 
+  echo "--------------------------------------------------"
+  echo "Configuring NginX ................................"
+  ./scripts/config_nginx.sh
+
 fi
 
 echo "--------------------------------------------------"
