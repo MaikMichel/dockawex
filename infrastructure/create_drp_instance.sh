@@ -1,9 +1,12 @@
 #!/bin/bash
+
+echo "Your script args ($#) are: $@"
+
 THIS_FILE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 COME_FROM_DIR=${PWD}
 
 # All Params are required
-if [ $# -ne 2 ]; then
+if [ $# -lt 2 ]; then
 	echo "Please call script by using all params in this order!"
 	echo "OCEAN_TOKEN MACHINE_NAME"
 
@@ -17,14 +20,11 @@ fi
 # store instance-name
 OCEAN_DROPLET_NAME=$2
 OCEAN_TOKEN=$1
-
+OCEAN_TAG=$3
 echo "###################################################"
 echo "create instance ${OCEAN_DROPLET_NAME}"
 
-#echo "docker-machine -D create --driver digitalocean --digitalocean-image \"centos-7-x64\" --digitalocean-region \"AMS3\" --digitalocean-size \"s-2vcpu-4gb\" --digitalocean-access-token ${OCEAN_TOKEN} ${OCEAN_DROPLET_NAME}"
-#--digitalocean-image "centos-7-x64"
-
-docker-machine -D create --driver digitalocean --digitalocean-size "s-2vcpu-4gb" --digitalocean-region "ams3" --digitalocean-access-token ${OCEAN_TOKEN} ${OCEAN_DROPLET_NAME}
+docker-machine -D create --driver digitalocean --digitalocean-size "s-2vcpu-4gb" --digitalocean-region "ams3" --digitalocean-access-token ${OCEAN_TOKEN} --digitalocean-tags ${OCEAN_TAG} ${OCEAN_DROPLET_NAME}
 
 eval $(docker-machine env ${OCEAN_DROPLET_NAME})
 
