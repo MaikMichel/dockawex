@@ -105,7 +105,7 @@ create_machine() {
     echo "Creating machine: ${MACHINE_NAME} / DriverType: $DRIVER_TYPE"
     if [ "$DRIVER_TYPE" == "AWS" ]
     then
-      ${INFRA_PATH}/create_ec2_instance.sh ${ACCESS_KEY_ID} ${SECRET_ACCESS_KEY} ${VPC_ID} ${MACHINE_NAME}
+      ${INFRA_PATH}/create_ec2_instance.sh ${ACCESS_KEY_ID} ${SECRET_ACCESS_KEY} ${VPC_ID} ${MACHINE_NAME} ${EC2_TAG}
     else
       ${INFRA_PATH}/create_drp_instance.sh ${OCEAN_TOKEN} ${MACHINE_NAME} ${OCEAN_TAG}
     fi

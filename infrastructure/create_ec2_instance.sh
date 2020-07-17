@@ -18,6 +18,7 @@ fi
 
 # store instance-name
 EC2_NAME=$4
+EC2_TAG=$5
 
 # credentials for awsdockeruser
 # aws configure has to be called before
@@ -45,6 +46,7 @@ docker-machine -D create \
   --amazonec2-region eu-central-1 \
   --amazonec2-root-size 32 \
   --amazonec2-instance-type t2.medium \
+  --amazonec2-tags tag,${EC2_TAG} \
   ${EC2_NAME}
 
 eval $(docker-machine env ${EC2_NAME})
