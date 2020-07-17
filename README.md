@@ -18,16 +18,16 @@ With DOCKAWEX you can easily create your local APEX development environment cons
 For licensing reasons, you must host or provide the software packages to be installed yourself.
 
 
-File                                           | What / Link
----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-oracle-database-xe-18c-1.0-1.x86_64.rpm        | https://www.oracle.com/database/technologies/xe-downloads.html <br/>- Oracle DB 18c XE
-jre-8u251-linux-x64.tar.gz                     | https://javadl.oracle.com/webapps/download/AutoDL?BundleId=242050_3d5a2bb8f8d4428bbe94aed7ec7ae784 <br/>- JRE which will run tomcat
-apache-tomcat-8.5.54.tar.gz                    | http://mirror.23media.de/apache/tomcat/tomcat-8/v8.5.54/bin/apache-tomcat-8.5.54.tar.gz <br/>- Applicationserver, here will ORDS installed to
-ords-19.4.0.352.1226.zip                       | https://www.oracle.com/database/technologies/appdev/rest.html <br/>- Oracle REST Data Services, will provide access to APEX
-apex_20.1.zip                                  | https://www.oracle.com/tools/downloads/apex-downloads.html <br/>- APEX complete
-instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip   | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- Clientssoftware, to connect to oracle db
-instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- SQLPlus<br/>- install APEX and run your scripts and deployments
-
+File                                                 | What / Link
+---------------------------------------------------- | -----------------------------------------------------------------------------------------------------------------------------------------------------------
+oracle-database-xe-18c-1.0-1.x86_64.rpm              | https://www.oracle.com/database/technologies/xe-downloads.html <br/>- Oracle DB 18c XE
+jre-8u251-linux-x64.tar.gz                           | https://javadl.oracle.com/webapps/download/AutoDL?BundleId=242050_3d5a2bb8f8d4428bbe94aed7ec7ae784 <br/>- JRE which will run tomcat
+apache-tomcat-8.5.54.tar.gz                          | http://mirror.23media.de/apache/tomcat/tomcat-8/v8.5.54/bin/apache-tomcat-8.5.54.tar.gz <br/>- Applicationserver, here will ORDS installed to
+ords-19.4.0.352.1226.zip                             | https://www.oracle.com/database/technologies/appdev/rest.html <br/>- Oracle REST Data Services, will provide access to APEX
+apex_20.1.zip                                        | https://www.oracle.com/tools/downloads/apex-downloads.html <br/>- APEX complete
+instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- Clientssoftware, to connect to oracle db
+instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip   | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- SQLPlus<br/>- install APEX and run your scripts and deployments
+p30990551_2010_Generic.zip                           | https://support.oracle.com/epmos/faces/PatchDetail?patchId=30990551 <br/>- Patchsetbundle to be installed alongside
 
 When you are building against **local** machine, you can pack all files into the directories called "_binaries"
 ```shell
@@ -38,6 +38,7 @@ infrastructure/docker/appsrv/_binaries
   instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip
   jre-8u251-linux-x64.tar.gz
   ords-19.4.0.352.1226.zip
+  p30990551_2010_Generic.zip
 infrastructure/docker/oradb/_binaries
   oracle-database-xe-18c-1.0-1.x86_64.rpm
 ```
