@@ -19,3 +19,12 @@ java -jar ords.war set-property security.verifySSL false
 
 cp -rf ${target_dir}/ords/ords.war /tomcat/webapps/
 cp -rf ${target_dir}/apex/images /tomcat/webapps/i
+
+# when patch included, it has been unzipped, now install it too
+if [ -f /files/$FILE_APEX_PATCH ]
+then
+  echo "Copy files from patch $FILE_APEX_PATCH"
+  cp -rf ${target_dir}/$APEX_PATCH/images/* /tomcat/webapps/i
+else
+  echo "No Patchfile $FILE_APEX_PATCH found"
+fi

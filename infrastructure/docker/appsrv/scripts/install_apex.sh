@@ -68,7 +68,23 @@ apex_install(){
 !
   echo "-----------------------------------------------------------------"
 
+  # when patch included, it has been unzipped, now install it too
+  if [ -f /files/$FILE_APEX_PATCH ]
+  then
+    cd ${target_dir}/$APEX_PATCH
+    echo "Installing Patch $APEX_PATCH"
+    $SQLPLUS -S $SQLPLUS_ARGS <<!
+  @catpatch
+!
+  echo "-----------------------------------------------------------------"
+  else
+    echo "No Patch $APEX_PATCH found"
+  fi
+
 }
+
+
+
 
 apex_config(){
   echo "Configuring apex..."
@@ -231,11 +247,11 @@ unzip_apex(){
   rm -rf ${target_dir}/apex
   unzip -q /files/$FILE_APEX -d ${target_dir}/
 
-
-  # solution for the problem with timezone
-  #dpkg-reconfigure tzdata
-  #echo "Europe/Berlin" > /etc/timezone
-  #dpkg-reconfigure -f noninteractive tzdata
+  # when patch file found then unzip
+  if [ -f /files/$FILE_APEX_PATCH ]
+  then
+    unzip -q /files/$FILE_APEX_PATCH -d ${target_dir}/
+  fi
 }
 
 
