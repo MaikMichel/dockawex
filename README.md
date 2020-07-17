@@ -109,21 +109,21 @@ export DDNS_URL=ddns.server.org
 
 ```
 
-### 2. Call script **infra_local.sh** to manage your local setup
+### 2. Call script **local.sh** to manage your local setup
 
 1. change your working directory to dockawex: ```cd dockawex```
-2. build images: ```dockawex$> ./infra_local.sh build```
-3. start container: ```dockawex$> ./infra_local.sh start```
+2. build images: ```dockawex$> ./local.sh build```
+3. start container: ```dockawex$> ./local.sh start```
 
 
 > ready...
-At http://localhost:8080/ords (or 192.168.99.100/ords when using docker-toolbox) APEX is waiting for you
+At http://localhost:8080/ords APEX is waiting for you
 
 More parameters will be displayed if you omit the parameters. 
 ```bash
-  $ ./infra_local.sh 
+  $ ./local.sh 
   Please call script by using all params in this order!
-      ././infra_local.sh command
+      ././local.sh command
   -----------------------------------------------------
 
     command
@@ -212,18 +212,18 @@ export OCEAN_TAG=<your tag>
 
 This is like the local section mention above. Just set your vars.
 
-### 4. Call script **infra_remote.sh** to manage your remote setup
+### 4. Call script **remote.sh** to manage your remote setup
 
 1. change your working directory to the machines path: ```cd dockawex```
-2. create machine: ```dockawex$> ./infra_remote.sh full switch provider/your-do-settings.env my-droplet create```
-3. build images: ```dockawex$> ./infra_remote.sh full switch provider/your-do-settings.env my-droplet build```
-4. build images: ```dockawex$> ./infra_remote.sh full switch provider/your-do-settings.env my-droplet start```
+2. create machine: ```dockawex$> ./remote.sh full switch provider/your-do-settings.env my-droplet create```
+3. build images: ```dockawex$> ./remote.sh full switch provider/your-do-settings.env my-droplet build```
+4. build images: ```dockawex$> ./remote.sh full switch provider/your-do-settings.env my-droplet start```
 
-> More parameters will be displayed if you omit the parameters. ```dockawex$> ./infra_remote.sh```
+> More parameters will be displayed if you omit the parameters. ```dockawex$> ./remote.sh```
 
 ```bash
-  $ ./infra_remote.sh 
-  Usage ./infra_remote.sh full|dev switch|no_switch machine-prov-file machine-name command
+  $ ./remote.sh 
+  Usage ./remote.sh full|dev switch|no_switch machine-prov-file machine-name command
 
   full|dev
     > full: all containers (nginx, letsencrypt)
