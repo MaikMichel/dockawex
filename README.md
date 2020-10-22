@@ -24,7 +24,7 @@ oracle-database-xe-18c-1.0-1.x86_64.rpm              | https://www.oracle.com/da
 jre-8u251-linux-x64.tar.gz                           | https://javadl.oracle.com/webapps/download/AutoDL?BundleId=242050_3d5a2bb8f8d4428bbe94aed7ec7ae784 <br/>- JRE which will run tomcat
 apache-tomcat-8.5.54.tar.gz                          | http://mirror.23media.de/apache/tomcat/tomcat-8/v8.5.54/bin/apache-tomcat-8.5.54.tar.gz <br/>- Applicationserver, here will ORDS installed to
 ords-19.4.0.352.1226.zip                             | https://www.oracle.com/database/technologies/appdev/rest.html <br/>- Oracle REST Data Services, will provide access to APEX
-apex_20.1.zip                                        | https://www.oracle.com/tools/downloads/apex-downloads.html <br/>- APEX complete
+apex_20.2.zip                                        | https://www.oracle.com/tools/downloads/apex-downloads.html <br/>- APEX complete
 instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- Clientssoftware, to connect to oracle db
 instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip   | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- SQLPlus<br/>- install APEX and run your scripts and deployments
 p30990551_2010_Generic.zip                           | https://support.oracle.com/epmos/faces/PatchDetail?patchId=30990551 <br/>- Patchsetbundle to be installed alongside
@@ -33,7 +33,7 @@ When you are building against **local** machine, you can pack all files into the
 ```shell
 infrastructure/docker/appsrv/_binaries
   apache-tomcat-8.5.54.tar.gz
-  apex_20.1.zip
+  apex_20.2.zip
   instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip
   instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip
   jre-8u251-linux-x64.tar.gz
@@ -58,7 +58,7 @@ export DOWNLOAD_URL=https://your-url-pointing-to-binaries
 export FILE_DB=oracle-database-xe-18c-1.0-1.x86_64.rpm
 export FILE_ORDS=ords-19.4.0.352.1226.zip
 export FILE_TOMCAT=apache-tomcat-8.5.54.tar.gz
-export FILE_APEX=apex_20.1.zip
+export FILE_APEX=apex_20.2.zip
 export FILE_SQLPLUS=instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip
 
 export FILE_JRE=jre-8u251-linux-x64.tar.gz
@@ -79,7 +79,7 @@ export TOM_PASSWORD=SecurePwd123
 export ORDS_PASSWORD=SecurePwd123
 
 # APEX properties
-export APEX_USER=APEX_200100
+export APEX_USER=APEX_200200
 export INTERNAL_MAIL=your.admin-mail@somewhere.com
 
 # mail properties
