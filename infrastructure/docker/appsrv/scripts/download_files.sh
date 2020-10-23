@@ -31,6 +31,7 @@ downloadFiles() {
 
 downloadFiles
 
+ls -la /files
 
 # if now one file is missing, we have to quit...
 if [ ! -f /files/${FILE_JRE} ] || [ ! -f /files/${FILE_ORDS} ] || [ ! -f /files/${FILE_TOMCAT} ] || [ ! -f /files/${FILE_APEX} ] || [ ! -f /files/${FILE_CLIENT} ] || [ ! -f /files/${FILE_SQLPLUS} ]; then  
