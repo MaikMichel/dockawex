@@ -8,6 +8,7 @@ services:
   appsrv:    
     volumes:
       - vhostvol:/etc/nginx/vhost.d
+      - confdvol:/etc/nginx/conf.d
 
   nginx-proxy:
     image: jwilder/nginx-proxy:alpine
@@ -21,6 +22,7 @@ services:
       - '443:443'
     volumes:
       - vhostvol:/etc/nginx/vhost.d
+      - confdvol:/etc/nginx/conf.d
       - htmlvol:/usr/share/nginx/html
       - '/etc/nginx/certs:/etc/nginx/certs:ro'
       - '/var/run/docker.sock:/tmp/docker.sock:ro'

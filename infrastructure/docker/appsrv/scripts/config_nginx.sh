@@ -17,9 +17,23 @@ if [ -d "/etc/nginx/vhost.d" ]; then
   echo "  writing $TARGET_FILE"
   echo "proxy_set_header Origin \"\";" > $TARGET_FILE
 
-  
+  TARGET_FILE="/etc/nginx/vhost.d/dockawex_proxy.conf"
+  echo "  writing $TARGET_FILE"
 
+  echo "server_tokens off;" > $TARGET_FILE
+  echo "client_max_body_size 100m;" >> $TARGET_FILE
 
 else
-  echo "Nginx path not found"
+  echo "nginx vhost.d path not found"
+fi
+
+if [ -d "/etc/nginx/conf.d" ]; then  
+  TARGET_FILE="/etc/nginx/conf.d/dockawex_proxy.conf"
+  echo "  writing $TARGET_FILE"
+
+  echo "server_tokens off;" > $TARGET_FILE
+  echo "client_max_body_size 100m;" >> $TARGET_FILE
+
+else
+  echo "nginx vhost.d path not found"
 fi
