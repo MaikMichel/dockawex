@@ -4612,15 +4612,57 @@
     </welcome-file-list>
 
     <error-page> 
-        <error-code>404</error-code> 
-        <location>/error.jsp</location>
+        <error-code>400</error-code> 
+        <location>/HTTP400.html</location>
     </error-page>
+    
+    <error-page> 
+        <error-code>401</error-code> 
+        <location>/HTTP401.html</location>
+    </error-page>
+
     <error-page> 
         <error-code>403</error-code> 
-        <location>/error.jsp</location>
+        <location>/HTTP403.html</location>
     </error-page>
+
+    <error-page> 
+        <error-code>404</error-code> 
+        <location>/HTTP404.html</location>
+    </error-page>
+
     <error-page> 
         <error-code>500</error-code> 
-        <location>/error.jsp</location>
+        <location>/HTTP500.html</location>
+    </error-page>
+
+    <error-page> 
+        <error-code>501</error-code> 
+        <location>/HTTP501.html</location>
+    </error-page>
+
+    <error-page> 
+        <error-code>502</error-code> 
+        <location>/HTTP502.html</location>
+    </error-page>
+
+    <error-page> 
+        <error-code>503</error-code> 
+        <location>/HTTP503.html</location>
+    </error-page>
+
+    <error-page> 
+        <error-code>520</error-code> 
+        <location>/HTTP520.html</location>
+    </error-page>
+
+    <error-page> 
+        <error-code>521</error-code> 
+        <location>/HTTP521.html</location>
+    </error-page>
+
+    <error-page> 
+        <error-code>533</error-code> 
+        <location>/HTTP533.html</location>
     </error-page>
 </web-app>
