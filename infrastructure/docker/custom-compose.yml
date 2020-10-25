@@ -58,6 +58,8 @@ services:
       - DDNS_USER=${DDNS_USER}
       - DDNS_PASSWORD=${DDNS_PASSWORD}
       - DDNS_URL=${DDNS_URL}
+      # at least we route on slash to the following application-id
+      - APP_NUM=${APP_NUM}
 
   nodeprx:
     container_name: ${CONTAINER_PREFIX}_nodeprx_1
