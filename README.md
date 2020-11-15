@@ -28,6 +28,7 @@ apex_20.2.zip                                        | https://www.oracle.com/to
 instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- Clientssoftware, to connect to oracle db
 instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip   | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- SQLPlus<br/>- install APEX and run your scripts and deployments
 p30990551_2010_Generic.zip                           | https://support.oracle.com/epmos/faces/PatchDetail?patchId=30990551 <br/>- Patchsetbundle to be installed alongside
+                                                       https://support.oracle.com/epmos/faces/PatchDetail?patchId=32006852
 
 When you are building against **local** machine, you can pack all files into the directories called "_binaries"
 ```shell

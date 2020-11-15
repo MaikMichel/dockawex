@@ -35,5 +35,5 @@ if [ -d "/etc/nginx/conf.d" ]; then
   echo "client_max_body_size 100m;" >> $TARGET_FILE
 
 else
-  echo "nginx vhost.d path not found"
+  echo "nginx conf.d path not found"
 fi
