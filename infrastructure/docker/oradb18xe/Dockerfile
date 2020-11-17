@@ -1,21 +1,18 @@
 # LICENSE UPL 1.0
 #
-# Copyright (c) 1982-2018 Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2018, 2020 Oracle and/or its affiliates.
 #
 # ORACLE DOCKERFILES PROJECT
 # --------------------------
 # This is the Dockerfile for Oracle Database 18c Express Edition
-#
+# 
 # REQUIRED FILES TO BUILD THIS IMAGE
 # ----------------------------------
-# (1) oracle-database-xe-18c-1.0-1.x86_64.rpm
-#     Download Oracle Database Express Edition (XE) Release 18.4.0.0.0 (18c) for Linux x64
-#     from https://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html
+# None
 #
 # HOW TO BUILD THIS IMAGE
 # -----------------------
-# Put the downloaded file in the same directory as this Dockerfile
-# Run:
+# Run: 
 #      $ docker build -t oracle/database:18.4.0-xe -f Dockerfile.xe .
 #
 #
@@ -23,9 +20,18 @@
 # ---------------
 FROM oraclelinux:7-slim
 
-# Maintainer
-# ----------
-MAINTAINER Gerald Venzl <gerald.venzl@oracle.com>
+# Labels
+# ------
+LABEL "provider"="Oracle"                                               \
+      "issues"="https://github.com/oracle/docker-images/issues"         \
+      "volume.data"="/opt/oracle/oradata"                               \
+      "volume.setup.location1"="/opt/oracle/scripts/setup"              \
+      "volume.setup.location2"="/docker-entrypoint-initdb.d/setup"      \
+      "volume.startup.location1"="/opt/oracle/scripts/startup"          \
+      "volume.startup.location2"="/docker-entrypoint-initdb.d/startup"  \
+      "port.listener"="1521"                                            \
+      "port.oemexpress"="5500"                                          \
+      "port.apex"="8888"
 
 ARG FILE_DB
 ARG DB_PASSWORD
@@ -34,8 +40,7 @@ ONBUILD RUN if [ -z "${DOWNLOAD_URL}" ]; then echo "DOWNLOAD_URL NOT SET - ERROR
 
 # Environment variables required for this build (do NOT change)
 # -------------------------------------------------------------
-ENV ORACLE_PWD=${DB_PASSWORD} \
-    ORACLE_BASE=/opt/oracle \
+ENV ORACLE_BASE=/opt/oracle \
     ORACLE_HOME=/opt/oracle/product/18c/dbhomeXE \
     ORACLE_SID=XE \
     INSTALL_FILE_1="oracle-database-xe-18c-1.0-1.x86_64.rpm" \
@@ -44,9 +49,10 @@ ENV ORACLE_PWD=${DB_PASSWORD} \
     CONF_FILE="oracle-xe-18c.conf" \
     CHECK_SPACE_FILE="checkSpace.sh" \
     CHECK_DB_FILE="checkDBStatus.sh" \
-    DOWNLOAD_BINARIES_FILE="oracle-prepare.sh" \
     INSTALL_DIR="$HOME/install" \
-    ORACLE_DOCKER_INSTALL="true"
+    ORACLE_DOCKER_INSTALL="true" \
+    ORACLE_PWD=${DB_PASSWORD} \
+    DOWNLOAD_BINARIES_FILE="oracle-prepare.sh"
 
 # Use second ENV so that variable get substituted
 ENV PATH=$ORACLE_HOME/bin:$PATH
@@ -63,13 +69,13 @@ COPY _binaries $INSTALL_DIR/
 RUN chmod ug+x $INSTALL_DIR/oracle-prepare.sh; sync && \
   $INSTALL_DIR/oracle-prepare.sh
 
-
+   
 RUN chmod ug+x $INSTALL_DIR/*.sh && \
     sync && \
     $INSTALL_DIR/$CHECK_SPACE_FILE && \
     cd $INSTALL_DIR && \
     yum -y install openssl oracle-database-preinstall-18c && \
-    yum -y install $INSTALL_FILE_1 && \
+    yum -y localinstall $INSTALL_FILE_1 && \
     rm -rf /var/cache/yum && \
     mkdir -p $ORACLE_BASE/scripts/setup && \
     mkdir $ORACLE_BASE/scripts/startup && \
@@ -85,8 +91,9 @@ RUN chmod ug+x $INSTALL_DIR/*.sh && \
     rm -rf $INSTALL_DIR && \
     chmod ug+x $ORACLE_BASE/*.sh
 
-VOLUME ["$ORACLE_BASE/oradata"]
-EXPOSE 1521 8080 5500
+#VOLUME ["$ORACLE_BASE/oradata"]
+#EXPOSE 1521 8080 5500
+
 HEALTHCHECK --interval=1m --start-period=5m \
    CMD "$ORACLE_BASE/$CHECK_DB_FILE" >/dev/null || exit 1
 

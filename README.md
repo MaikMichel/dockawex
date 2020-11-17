@@ -21,9 +21,9 @@ For licensing reasons, you must host or provide the software packages to be inst
 File                                                 | What / Link
 ---------------------------------------------------- | -----------------------------------------------------------------------------------------------------------------------------------------------------------
 oracle-database-xe-18c-1.0-1.x86_64.rpm              | https://www.oracle.com/database/technologies/xe-downloads.html <br/>- Oracle DB 18c XE
-jre-8u251-linux-x64.tar.gz                           | https://javadl.oracle.com/webapps/download/AutoDL?BundleId=242050_3d5a2bb8f8d4428bbe94aed7ec7ae784 <br/>- JRE which will run tomcat
-apache-tomcat-8.5.54.tar.gz                          | http://mirror.23media.de/apache/tomcat/tomcat-8/v8.5.54/bin/apache-tomcat-8.5.54.tar.gz <br/>- Applicationserver, here will ORDS installed to
-ords-19.4.0.352.1226.zip                             | https://www.oracle.com/database/technologies/appdev/rest.html <br/>- Oracle REST Data Services, will provide access to APEX
+jre-8u271-linux-x64.tar.gz                           | https://javadl.oracle.com/webapps/download/AutoDL?BundleId=242050_3d5a2bb8f8d4428bbe94aed7ec7ae784 <br/>- JRE which will run tomcat
+apache-tomcat-8.5.59.tar.gz                          | http://mirror.23media.de/apache/tomcat/tomcat-8/v8.5.54/bin/apache-tomcat-8.5.59.tar.gz <br/>- Applicationserver, here will ORDS installed to
+ords-20.3.0.301.1819.zip                             | https://www.oracle.com/database/technologies/appdev/rest.html <br/>- Oracle REST Data Services, will provide access to APEX
 apex_20.2.zip                                        | https://www.oracle.com/tools/downloads/apex-downloads.html <br/>- APEX complete
 instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- Clientssoftware, to connect to oracle db
 instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip   | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- SQLPlus<br/>- install APEX and run your scripts and deployments
@@ -33,12 +33,12 @@ p30990551_2010_Generic.zip                           | https://support.oracle.co
 When you are building against **local** machine, you can pack all files into the directories called "_binaries"
 ```shell
 infrastructure/docker/appsrv/_binaries
-  apache-tomcat-8.5.54.tar.gz
+  apache-tomcat-8.5.59.tar.gz
   apex_20.2.zip
   instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip
   instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip
-  jre-8u251-linux-x64.tar.gz
-  ords-19.4.0.352.1226.zip
+  jre-8u271-linux-x64.tar.gz
+  ords-20.3.0.301.1819.zip
   p30990551_2010_Generic.zip
 infrastructure/docker/oradb/_binaries
   oracle-database-xe-18c-1.0-1.x86_64.rpm
@@ -57,14 +57,14 @@ The configurations of the individual machines are stored in the "machines/*" dir
 export DOWNLOAD_URL=https://your-url-pointing-to-binaries
 
 export FILE_DB=oracle-database-xe-18c-1.0-1.x86_64.rpm
-export FILE_ORDS=ords-19.4.0.352.1226.zip
-export FILE_TOMCAT=apache-tomcat-8.5.54.tar.gz
+export FILE_ORDS=ords-20.3.0.301.1819.zip
+export FILE_TOMCAT=apache-tomcat-8.5.59.tar.gz
 export FILE_APEX=apex_20.2.zip
 export FILE_SQLPLUS=instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip
 
-export FILE_JRE=jre-8u251-linux-x64.tar.gz
+export FILE_JRE=jre-8u271-linux-x64.tar.gz
 # if you extract the tar.gz this is the name of the directory inside
-export FILE_JRE_VERSION=jre1.8.0_251  
+export FILE_JRE_VERSION=jre1.8.0_271  
  
 export FILE_CLIENT=instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip
 # if you extract the zip this is the name of the directory inside
