@@ -27,8 +27,8 @@ ords-20.3.0.301.1819.zip                             | https://www.oracle.com/da
 apex_20.2.zip                                        | https://www.oracle.com/tools/downloads/apex-downloads.html <br/>- APEX complete
 instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- Clientssoftware, to connect to oracle db
 instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip   | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- SQLPlus<br/>- install APEX and run your scripts and deployments
-p30990551_2010_Generic.zip                           | https://support.oracle.com/epmos/faces/PatchDetail?patchId=30990551 <br/>- Patchsetbundle to be installed alongside
-                                                       https://support.oracle.com/epmos/faces/PatchDetail?patchId=32006852
+p32006852_2020_Generic.zip                           | https://support.oracle.com/epmos/faces/PatchDetail?patchId=32006852 <br/>- Patchsetbundle to be installed alongside
+                                                       
 
 When you are building against **local** machine, you can pack all files into the directories called "_binaries"
 ```shell
@@ -39,7 +39,7 @@ infrastructure/docker/appsrv/_binaries
   instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip
   jre-8u271-linux-x64.tar.gz
   ords-20.3.0.301.1819.zip
-  p30990551_2010_Generic.zip
+  p32006852_2020_Generic.zip
 infrastructure/docker/oradb/_binaries
   oracle-database-xe-18c-1.0-1.x86_64.rpm
 ```
