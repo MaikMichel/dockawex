@@ -29,6 +29,7 @@ services:
         - FILE_INSTANT_CLIENT_VERION=${FILE_INSTANT_CLIENT_VERION}
         - FILE_APEX_PATCH=${FILE_APEX_PATCH}
         - APEX_PATCH=${APEX_PATCH}
+        - APEX_IMAGE_PREFIX=${APEX_IMAGE_PREFIX}
         # Pwd used in tomcat
         - TOM_PASSWORD=${TOM_PASSWORD}
     container_name: ${CONTAINER_PREFIX}_appsrv_1

@@ -81,6 +81,18 @@ apex_install(){
     echo "No Patch $APEX_PATCH found"
   fi
 
+
+  # set image-prexix
+  if [[ ! -z ${APEX_IMAGE_PREFIX} ]]; then
+    echo "-----------------------------------------------------------------"
+    cd ${target_dir}/apex/utilities
+    echo "setting Image Prefix to ${APEX_IMAGE_PREFIX}"  
+    $SQLPLUS -S $SQLPLUS_ARGS <<!
+  @reset_image_prefix_core.sql ${APEX_IMAGE_PREFIX}
+!
+
+  fi
+
 }
 
 
@@ -215,7 +227,7 @@ end;
 PROMPT  =============================================================================
 PROMPT  ==   SETUP SMTP
 PROMPT  =============================================================================
-PROMPT INTERNAL_MAIL:    ${INTERNAL_MAIL}
+PROMPT INTERNAL_MAIL:     ${INTERNAL_MAIL}
 PROMPT SMTP_HOST_ADDRESS: ${SMTP_HOST_ADDRESS}
 PROMPT SMTP_FROM:         ${SMTP_FROM}
 PROMPT SMTP_USERNAME:     ${SMTP_USERNAME}
