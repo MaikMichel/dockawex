@@ -12,7 +12,6 @@ if [ -d "/etc/nginx/vhost.d" ]; then
   echo "  rewrite ^ /ords/f?p=${APP_NUM};" >> $TARGET_FILE
   echo "}" >> $TARGET_FILE
   echo "gzip on;" >> $TARGET_FILE
-  echo "proxy_cache_path /var/cache/nginx keys_zone=ORDS-CACHE:128m;" >> $TARGET_FILE
   
 
   TARGET_FILE="/etc/nginx/vhost.d/${VIRTUAL_HOST}_location"
@@ -32,6 +31,7 @@ if [ -d "/etc/nginx/conf.d" ]; then
   echo "  writing $TARGET_FILE"
 
   echo "server_tokens off;" > $TARGET_FILE
+  echo "proxy_cache_path /var/cache/nginx keys_zone=ORDS-CACHE:128m;" >> $TARGET_FILE
   # echo "client_max_body_size 100m;" >> $TARGET_FILE
 
 else
