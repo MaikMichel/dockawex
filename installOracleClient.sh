@@ -3,7 +3,8 @@
 printf "Automated installer of oracle client for Ubuntu" 
 
 # Install dependencies
-sudo apt updatesudo apt install -y alien
+sudo apt update
+sudo apt install -y alien
 
 
 
