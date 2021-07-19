@@ -23,27 +23,27 @@ File                                                 | What / Link
 oracle-database-xe-18c-1.0-1.x86_64.rpm              | https://www.oracle.com/database/technologies/xe-downloads.html <br/>- Oracle DB 18c XE
 jre-8u271-linux-x64.tar.gz                           | https://javadl.oracle.com/webapps/download/AutoDL?BundleId=242050_3d5a2bb8f8d4428bbe94aed7ec7ae784 <br/>- JRE which will run tomcat
 apache-tomcat-8.5.59.tar.gz                          | http://mirror.23media.de/apache/tomcat/tomcat-8/v8.5.59/bin/apache-tomcat-8.5.59.tar.gz <br/>- Applicationserver, here will ORDS installed to
-ords-20.3.0.301.1819.zip                             | https://www.oracle.com/database/technologies/appdev/rest.html <br/>- Oracle REST Data Services, will provide access to APEX
-apex_20.2.zip                                        | https://www.oracle.com/tools/downloads/apex-downloads.html <br/>- APEX complete
+ords-21.2.0.174.1826.zip                             | https://www.oracle.com/database/technologies/appdev/rest.html <br/>- Oracle REST Data Services, will provide access to APEX
+apex_21.1.zip                                        | https://www.oracle.com/tools/downloads/apex-downloads.html <br/>- APEX complete
 instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- Clientssoftware, to connect to oracle db
 instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip   | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- SQLPlus<br/>- install APEX and run your scripts and deployments
-p32006852_2020_Generic.zip                           | https://support.oracle.com/epmos/faces/PatchDetail?patchId=32006852 <br/>- Patchsetbundle to be installed alongside
-                                                       
+p32598392_2110_Generic.zip                           | https://support.oracle.com/epmos/faces/PatchDetail?patchId=32598392 <br/>- Patchsetbundle to be installed alongside
+
 
 When you are building against **local** machine, you can pack all files into the directories called "_binaries"
 ```shell
 infrastructure/docker/appsrv/_binaries
   apache-tomcat-8.5.59.tar.gz
-  apex_20.2.zip
+  apex_21.1.zip
   instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip
   instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip
   jre-8u271-linux-x64.tar.gz
-  ords-20.3.0.301.1819.zip
-  p32006852_2020_Generic.zip
+  ords-21.2.0.174.1826.zip
+  p32598392_2110_Generic.zip
 infrastructure/docker/oradb/_binaries
   oracle-database-xe-18c-1.0-1.x86_64.rpm
 ```
-From here all files are copied into the respective image.  
+From here all files are copied into the respective image.
 Otherwise when building against remote machine, load the files into a directory of your choice (your website, S3, ...) from where they must be accessible via http(s). The URL for downloading these files has to be placed in your corresponding env-file.
 
 ## Local installation as development environment
@@ -57,28 +57,28 @@ The configurations of the individual machines are stored in the "machines/*" dir
 export DOWNLOAD_URL=https://your-url-pointing-to-binaries
 
 export FILE_DB=oracle-database-xe-18c-1.0-1.x86_64.rpm
-export FILE_ORDS=ords-20.3.0.301.1819.zip
+export FILE_ORDS=ords-21.2.0.174.1826.zip
 export FILE_TOMCAT=apache-tomcat-8.5.59.tar.gz
-export FILE_APEX=apex_20.2.zip
+export FILE_APEX=apex_21.1.zip
 export FILE_SQLPLUS=instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip
 
 export FILE_JRE=jre-8u271-linux-x64.tar.gz
 # if you extract the tar.gz this is the name of the directory inside
-export FILE_JRE_VERSION=jre1.8.0_271  
- 
+export FILE_JRE_VERSION=jre1.8.0_271
+
 export FILE_CLIENT=instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip
 # if you extract the zip this is the name of the directory inside
 export FILE_INSTANT_CLIENT_VERION=instantclient_19_6
 
-export FILE_APEX_PATCH=p32006852_2020_Generic.zip
+export FILE_APEX_PATCH=p32598392_2110_Generic.zip
 # if you extract the zip this is the name of the directory inside
-export APEX_PATCH=32006852
+export APEX_PATCH=32598392
 
 # if you want do not want to use a CDN you should comment that out
-export APEX_IMAGE_PREFIX=https://static.oracle.com/cdn/apex/20.2.0.00.20/
+export APEX_IMAGE_PREFIX=https://static.oracle.com/cdn/apex/21.1.2/
 
 
-# Timezone 
+# Timezone
 export TIME_ZONE=Europe/Berlin
 
 # DB Passes
@@ -88,7 +88,7 @@ export TOM_PASSWORD=SecurePwd123
 export ORDS_PASSWORD=SecurePwd123
 
 # APEX properties
-export APEX_USER=APEX_200200
+export APEX_USER=APEX_210100
 export INTERNAL_MAIL=your.admin-mail@somewhere.com
 
 # mail properties
@@ -100,7 +100,7 @@ export SMTP_PASSWORD=and-pwd
 
 ####### Following stuff is only used when using remote configuration #######
 
-# Point to and certificate 
+# Point to and certificate
 export VIRTUAL_HOST=your.domain.com
 export LETSENCRYPT_HOST=your.domain.com
 export LETSENCRYPT_EMAIL=your.admin-mail@somewhere.com
@@ -129,9 +129,9 @@ export DDNS_URL=ddns.server.org
 > ready...
 At http://localhost:8080/ords APEX is waiting for you
 
-More parameters will be displayed if you omit the parameters. 
+More parameters will be displayed if you omit the parameters.
 ```bash
-  $ ./local.sh 
+  $ ./local.sh
   Please call script by using all params in this order!
       ././local.sh command
   -----------------------------------------------------
@@ -148,7 +148,7 @@ More parameters will be displayed if you omit the parameters.
       > clear  > removes all container and images, prunes allocated space
 ```
 
-> If you have filled the email and smtp vars you will receive a message. 
+> If you have filled the email and smtp vars you will receive a message.
 ```sql
 apex_mail.send(p_from => '${SMTP_FROM}'
               ,p_to   => '${INTERNAL_MAIL}'
@@ -232,7 +232,7 @@ This is like the local section mention above. Just set your vars.
 > More parameters will be displayed if you omit the parameters. ```dockawex$> ./remote.sh```
 
 ```bash
-  $ ./remote.sh 
+  $ ./remote.sh
   Usage ./remote.sh full|dev switch|no_switch machine-prov-file machine-name command
 
   full|dev
@@ -310,4 +310,3 @@ Dockerfiles are based on and with the influence of:
 
 Some inspirations are coming from:
 - https://github.com/Dani3lSun/docker-db-apex-dev
-
