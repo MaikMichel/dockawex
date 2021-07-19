@@ -56,7 +56,8 @@ if [ "${STACK}" == "full" ]
 then
   COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/docker-compose-remote.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
 else
-  COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/docker-compose-local.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
+  COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
+  #COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/docker-compose-local.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
 fi
 
 if [ ! -f "machines/${MACHINE_NAME}/.env" ]
