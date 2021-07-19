@@ -70,6 +70,9 @@ else
   echo "Configuring NginX ................................"
   ./scripts/config_nginx.sh
 
+  echo "--------------------------------------------------"
+  echo "Installing Wallets................................"
+  ./scripts/install_wallet.sh
 fi
 
 echo "--------------------------------------------------"

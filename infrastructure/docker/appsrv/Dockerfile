@@ -21,7 +21,7 @@ ENV SMTP_HOST_ADDRESS=${SMTP_HOST_ADDRESS} \
 ENV ORDS_PASSWORD ${ORDS_PASSWORD:-secret}
 ARG TOM_PASSWORD
 
-RUN apt-get update && apt-get install -y libaio1 unzip curl locales nano
+RUN apt-get update && apt-get install -y libaio1 unzip curl locales nano python2.7 python-pip
 RUN locale-gen de_DE.UTF-8
 # NLS
 ENV LANG=de_DE.UTF-8 \
