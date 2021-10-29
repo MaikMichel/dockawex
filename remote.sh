@@ -72,10 +72,10 @@ then
         * ) echo "Please answer yes or no.";;
     esac
   done
-  
-  [ ! -d "machines/${MACHINE_NAME}" ] && mkdir "machines/${MACHINE_NAME}"  
+
+  [ ! -d "machines/${MACHINE_NAME}" ] && mkdir "machines/${MACHINE_NAME}"
   cat machines/_template/.env > "machines/${MACHINE_NAME}/.env"
-  echo "Configuration create in machines/${MACHINE_NAME}/.env"  
+  echo "Configuration create in machines/${MACHINE_NAME}/.env"
   echo "Please fullfill desired properties and run that script again"
   exit 0
 fi
@@ -92,7 +92,7 @@ source machines/${MACHINE_NAME}/.env
 
 switch_to_machine(){
   if [[ "$SWITCH" != "no_switch" ]]
-  then    
+  then
     echo "Switching to machine: ${MACHINE_NAME}"
     docker-machine env --shell bash ${MACHINE_NAME}
     eval $(docker-machine env --shell bash ${MACHINE_NAME})
@@ -125,19 +125,15 @@ build_images() {
   then
     mv ${INFRA_PATH}/docker/appsrv/_binaries/* ${INFRA_PATH}/docker/appsrv/_binaries_tmp 2>/dev/null
     mv ${INFRA_PATH}/docker/oradb18xe/_binaries/* ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb11xe/_binaries/* ${INFRA_PATH}/docker/oradb11xe/_binaries_tmp 2>/dev/null
 
     mv ${INFRA_PATH}/docker/appsrv/_binaries_tmp/note.md ${INFRA_PATH}/docker/appsrv/_binaries 2>/dev/null
     mv ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp/note.md ${INFRA_PATH}/docker/oradb18xe/_binaries 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb11xe/_binaries_tmp/note.md ${INFRA_PATH}/docker/oradb11xe/_binaries 2>/dev/null
   else
     mv ${INFRA_PATH}/docker/appsrv/_binaries_tmp/* ${INFRA_PATH}/docker/appsrv/_binaries 2>/dev/null
     mv ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp/* ${INFRA_PATH}/docker/oradb18xe/_binaries 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb11xe/_binaries_tmp/* ${INFRA_PATH}/docker/oradb11xe/_binaries 2>/dev/null
 
     mv ${INFRA_PATH}/docker/appsrv/_binaries/note_tmp.md ${INFRA_PATH}/docker/appsrv/_binaries_tmp 2>/dev/null
     mv ${INFRA_PATH}/docker/oradb18xe/_binaries/note_tmp.md ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb11xe/_binaries/note_tmp.md ${INFRA_PATH}/docker/oradb11xe/_binaries_tmp 2>/dev/null
   fi
 
   switch_to_machine
@@ -150,7 +146,7 @@ build_images() {
 
 start_services() {
   switch_to_machine
-    
+
   # startup containers
   echo "Building starting containers ${OPTION} for machine: ${MACHINE_NAME}"
   #echo "${COMPOSE_COMMAND} up -d ${OPTION}"
@@ -205,7 +201,7 @@ writenginx() {
   switch_to_machine
 
   ${COMPOSE_COMMAND} restart nginx-proxy
-  
+
 }
 
 
