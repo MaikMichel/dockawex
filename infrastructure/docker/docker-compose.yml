@@ -29,7 +29,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - dbstore:/opt/oracle/oradata      
+      - dbstore:/opt/oracle/oradata
       - appstore:/u01/apps
     restart: always
     depends_on:
@@ -41,21 +41,10 @@ services:
       retries: 10
       start_period: 45m
 
-  # NodeProxy to use from APEX in order to speak with to the world
-  nodeprx:
-    build:
-      context: ./nodeprx
-    container_name: nodeprx
-    ports:
-      - 3000:3000
-    restart: always
-    depends_on:
-      - oradb
 
-  
 # Define some volumes
 volumes:
   dbstore:
-    driver: local  
+    driver: local
   appstore:
-    driver: local  
+    driver: local

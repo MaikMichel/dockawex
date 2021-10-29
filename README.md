@@ -279,15 +279,7 @@ Check https://your-sub.domain.de/ords APEX is waiting ...
 2. How can I use machines on PC2 when the are created on PC1?
 > see: https://www.npmjs.com/package/machine-share
 
-3. How can I test access to external resources via APIproxy?
-```sql
-    select apex_web_service.make_rest_request(
-             p_url => 'http://nodeprx:3000/https/postman-echo.com/time/start?timestamp=2020-04-29&unit=month',
-             p_http_method => 'GET')
-      from dual
-```
-
-4. What are the login-credentials when using SQL Developer Web?
+3. What are the login-credentials when using SQL Developer Web?
 > you have to REST enable the database-schema
 ``` sql
   begin
