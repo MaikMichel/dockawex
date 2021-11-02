@@ -4,8 +4,7 @@ version: '3.7'
 services:
   # Oracle XE build by Dockerfile inside ./oradb
   oradb:
-    build:
-      context: ./oradb18xe
+    image: gvenzl/oracle-xe:21-full
     container_name: oradb
     # mem_limit: 2g
     ports:

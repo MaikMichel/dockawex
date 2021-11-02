@@ -5,20 +5,14 @@ version: '3.7'
 # and define some user data
 services:
   oradb:
-    build:
-      args:
-        - DOWNLOAD_URL=${DOWNLOAD_URL}
-        - FILE_DB=${FILE_DB}
-        - DB_PASSWORD=${DB_PASSWORD}
     container_name: ${CONTAINER_PREFIX}_oradb_1
     environment:
-      - DB_PASSWORD=${DB_PASSWORD}
-      - TZ=${TIME_ZONE}
+      - ORACLE_PASSWORD=${DB_PASSWORD}
 
   appsrv:
     build:
       args:
-        - DOWNLOAD_URL=${DOWNLOAD_URL}        
+        - DOWNLOAD_URL=${DOWNLOAD_URL}
         - FILE_JRE=${FILE_JRE}
         - FILE_JRE_VERSION=${FILE_JRE_VERSION}
         - FILE_ORDS=${FILE_ORDS}
@@ -37,7 +31,7 @@ services:
       # this is used for sys
       - DB_PASSWORD=${DB_PASSWORD}
       # all ORDS passes
-      - ORDS_PASSWORD=${ORDS_PASSWORD}      
+      - ORDS_PASSWORD=${ORDS_PASSWORD}
       # what APEX user we will use (Version)
       - APEX_USER=${APEX_USER}
       # admin email for internal workspace
@@ -61,7 +55,3 @@ services:
       - DDNS_URL=${DDNS_URL}
       # at least we route on slash to the following application-id
       - APP_NUM=${APP_NUM}
-
-  nodeprx:
-    container_name: ${CONTAINER_PREFIX}_nodeprx_1
-    
