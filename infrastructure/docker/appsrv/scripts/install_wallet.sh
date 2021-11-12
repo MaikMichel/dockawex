@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 
-export SQLPLUS=/${FILE_INSTANT_CLIENT_VERION}/sqlplus
+export SQLPLUS=sqlplus
 SQLPLUS_ARGS="sys/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_SID} as sysdba"
 
 # Info
@@ -39,10 +39,11 @@ fetch_scripts() {
 }
 
 # extract pem from data
+# python3.8 certdata2pem.py
 convert_certdata_pem() {
     echo ""
     echo "**** Extracting data from certdata.txt and creating certificates ****"
-    python certdata2pem.py
+    python3 certdata2pem.py
 }
 
 # Create password file
@@ -101,6 +102,7 @@ end_output() {
 
 move_wallet() {
   mv wallet /opt/oracle/oradata
+  chmod 755 -R /opt/oracle/oradata/wallet
   # chown -R oracle:oinstall /opt/oracle/oradata/wallet
 }
 

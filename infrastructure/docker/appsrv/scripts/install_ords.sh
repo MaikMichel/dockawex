@@ -3,7 +3,7 @@ target_dir=/u01/apps
 
 echo "Extracting Ords"
 mkdir ${target_dir}/ords
-unzip -q -o /files/$FILE_ORDS -d ${target_dir}/ords/
+unzip -q -o /files/ords.zip -d ${target_dir}/ords/
 
 sed -i -E 's:DB_PASSWORD:'$DB_PASSWORD':g' /scripts/ords_params.properties
 sed -i -E 's:ORDS_PASSWORD:'$ORDS_PASSWORD':g' /scripts/ords_params.properties
@@ -24,7 +24,7 @@ cp -rf ${target_dir}/apex/images /tomcat/webapps/i
 if [ -f /files/$FILE_APEX_PATCH ]
 then
   echo "Copy files from patch $FILE_APEX_PATCH"
-  cp -rf ${target_dir}/$APEX_PATCH/images/* /tomcat/webapps/i
+  cp -rf ${target_dir}/apexpatch/*/images/* /tomcat/webapps/i
 else
   echo "No Patchfile $FILE_APEX_PATCH found"
 fi
