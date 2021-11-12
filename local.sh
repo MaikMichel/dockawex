@@ -22,11 +22,9 @@ if [ $# -lt 1 ]; then
   echo
 	exit 1
 fi
-# default is machine-name for local
-EC2_NAME="default"
 
 COMMAND=$1
 OPTION=$2
 
 # call remote
-./remote.sh dev ${EC2_NAME} ${COMMAND} ${OPTION}
+./remote.sh dev default ${COMMAND} ${OPTION}
