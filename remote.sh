@@ -24,7 +24,7 @@ if [ $# -lt 3 ]; then
   echo "    > stop   > stops services"
   echo "    > clear  > clears services"
   echo "    > exec   > calls compose only and attach params"
-  echo "    > new    > generates new machine folder with default.env"
+  echo "    > new    > generates new environment file base on environment parameter"
   echo
   echo
   exit 1
@@ -39,8 +39,6 @@ OPTION=$4
 CONTAINER_PREFIX=${ENV_FILE##*/}
 CONTAINER_PREFIX=${CONTAINER_PREFIX%.*}
 export CONTAINER_PREFIX=${CONTAINER_PREFIX}
-echo $CONTAINER_PREFIX
-
 
 # path
 INFRA_PATH="infrastructure"
@@ -65,20 +63,26 @@ then
     esac
   done
 
-  mkdir -p "${ENV_FILE%/*}" && touch "${ENV_FILE}"
+
+fi
+
+source ${ENV_FILE}
+
+new() {
+
+  if [[ ! -d "$(dirname ${ENV_FILE})" ]]; then
+    mkdir -p "$(dirname ${ENV_FILE})"
+  fi
 
   cat environments/_template/.env > "${ENV_FILE}"
   echo "Configuration create in ${ENV_FILE}"
   echo "Please fullfill desired properties and run this script again"
   exit 0
-fi
-
-source ${ENV_FILE}
-
+}
 
 build_images() {
 
-  if [ "$ENV_FILE" != "default" ]
+  if [ "$CONTAINER_PREFIX" != "local" ]
   then
     mv ${INFRA_PATH}/docker/appsrv/_binaries/* ${INFRA_PATH}/docker/appsrv/_binaries_tmp 2>/dev/null
     mv ${INFRA_PATH}/docker/appsrv/_binaries_tmp/note.md ${INFRA_PATH}/docker/appsrv/_binaries 2>/dev/null
@@ -215,6 +219,9 @@ case ${COMMAND} in
     ;;
   'nginx')
     writenginx
+    ;;
+  'new')
+    new
     ;;
   *)
     ${COMMAND}
