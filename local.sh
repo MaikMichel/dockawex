@@ -27,4 +27,4 @@ COMMAND=$1
 OPTION=$2
 
 # call remote
-./remote.sh dev default ${COMMAND} ${OPTION}
+./remote.sh dev machines/local.env ${COMMAND} ${OPTION}

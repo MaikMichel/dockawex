@@ -3,14 +3,14 @@
 # All Params are required
 if [ $# -lt 3 ]; then
   echo
-  echo "Usage $0 full|dev switch|no_switch machine-prov-file machine-name command"
+  echo "Usage $0 full|dev environment-file command"
   echo
   echo "  full|dev "
   echo "    > full: all containers (nginx, lets'encrypt)"
   echo "    > dev:  only db, appsrv and node-proxy"
   echo
-  echo "  machine-name "
-  echo "    > here is environment file located "
+  echo "  environment "
+  echo "    > path to environment file ex: environments/demo.env "
   echo
   echo "  command "
   echo "    > build  > builds only images"
@@ -31,25 +31,30 @@ if [ $# -lt 3 ]; then
 fi
 
 STACK=$1
-MACHINE_NAME=$2
+ENV_FILE=$2
 COMMAND=$3
 OPTION=$4
 
-export CONTAINER_PREFIX=${MACHINE_NAME}
+
+CONTAINER_PREFIX=${ENV_FILE##*/}
+CONTAINER_PREFIX=${CONTAINER_PREFIX%.*}
+export CONTAINER_PREFIX=${CONTAINER_PREFIX}
+echo $CONTAINER_PREFIX
+
 
 # path
 INFRA_PATH="infrastructure"
 
 if [ "${STACK}" == "full" ]
 then
-  COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/docker-compose-remote.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
+  COMPOSE_COMMAND="docker-compose -p ${CONTAINER_PREFIX} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/docker-compose-remote.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
 else
-  COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
+  COMPOSE_COMMAND="docker-compose -p ${CONTAINER_PREFIX} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
 fi
 
-if [ ! -f "machines/${MACHINE_NAME}/.env" ]
+if [ ! -f "${ENV_FILE}" ]
 then
-  echo "Machine: ${MACHINE_NAME} not found inside machines."
+  echo "Environment-File: ${ENV_FILE} not found"
 
   while true; do
     read -p "Should I create a basic configuration? y/n?" yn
@@ -60,45 +65,38 @@ then
     esac
   done
 
-  [ ! -d "machines/${MACHINE_NAME}" ] && mkdir "machines/${MACHINE_NAME}"
-  cat machines/_template/.env > "machines/${MACHINE_NAME}/.env"
-  echo "Configuration create in machines/${MACHINE_NAME}/.env"
-  echo "Please fullfill desired properties and run that script again"
+  mkdir -p "${ENV_FILE%/*}" && touch "${ENV_FILE}"
+
+  cat environments/_template/.env > "${ENV_FILE}"
+  echo "Configuration create in ${ENV_FILE}"
+  echo "Please fullfill desired properties and run this script again"
   exit 0
 fi
 
-source machines/${MACHINE_NAME}/.env
+source ${ENV_FILE}
 
 
 build_images() {
 
-  if [ "$MACHINE_NAME" != "default" ]
+  if [ "$ENV_FILE" != "default" ]
   then
     mv ${INFRA_PATH}/docker/appsrv/_binaries/* ${INFRA_PATH}/docker/appsrv/_binaries_tmp 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb18xe/_binaries/* ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp 2>/dev/null
-
     mv ${INFRA_PATH}/docker/appsrv/_binaries_tmp/note.md ${INFRA_PATH}/docker/appsrv/_binaries 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp/note.md ${INFRA_PATH}/docker/oradb18xe/_binaries 2>/dev/null
   else
     mv ${INFRA_PATH}/docker/appsrv/_binaries_tmp/* ${INFRA_PATH}/docker/appsrv/_binaries 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp/* ${INFRA_PATH}/docker/oradb18xe/_binaries 2>/dev/null
-
     mv ${INFRA_PATH}/docker/appsrv/_binaries/note_tmp.md ${INFRA_PATH}/docker/appsrv/_binaries_tmp 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb18xe/_binaries/note_tmp.md ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp 2>/dev/null
   fi
 
 
-
   # build images
-  echo "Building images for machine: ${MACHINE_NAME}"
+  echo "Building images for environment: ${ENV_FILE}"
   ${COMPOSE_COMMAND} build ${OPTION}
 }
 
 
 start_services() {
   # startup containers
-  echo "Building starting containers ${OPTION} for machine: ${MACHINE_NAME}"
-  #echo "${COMPOSE_COMMAND} up -d ${OPTION}"
+  echo "Building starting containers ${OPTION} for environment: ${ENV_FILE}"
   ${COMPOSE_COMMAND} up -d ${OPTION}
 
   echo_log
@@ -109,12 +107,12 @@ echo_log(){
   echo ""
 
   # only on remote you are able tu renew certificates
-  if [ "$MACHINE_NAME" != "default" ]
+  if [ "$CONTAINER_PREFIX" != "local" ]
   then
-    echo "view log-output enter   : ./remote.sh ${STACK} ${SWITCH} ${MACHINE_PROVIDER} ${MACHINE_NAME} logs"
-    echo "renew certificates enter: ./remote.sh ${STACK} ${SWITCH} ${MACHINE_PROVIDER} ${MACHINE_NAME} renew"
+    echo "view log-output enter   : ./remote.sh ${STACK} ${ENV_FILE} logs"
+    echo "renew certificates enter: ./remote.sh ${STACK} ${ENV_FILE} renew"
     echo
-    echo "On first start you should call ./remote.sh ${STACK} ${SWITCH} ${MACHINE_PROVIDER} ${MACHINE_NAME} nginx"
+    echo "On first start you should call ./remote.sh ${STACK} ${ENV_FILE} nginx"
     echo "to set vhost.d"
   else
     echo "view log-output enter   : ./local.sh logs"
