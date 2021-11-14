@@ -2,7 +2,7 @@
 
 [![APEX Community](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/78c5adbe/badges/apex-community-badge.svg)]() [![APEX Tool](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/b7e95341/badges/apex-tool-badge.svg)]() [![APEX Built with Love](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/7919f913/badges/apex-love-badge.svg)]()
 
-With DOCKAWEX you can easily create your local APEX development environment consisting of Oracle Database 18c XE, Tomcat with ORDS and an additional node proxy. Additionally you have the possibility to remotely build a container architecture for your APEX project via docker-machine and the included drivers. Here your containers will be additionally secured via Let's Encrypt and nginx and made known in the cloud.
+With DOCKAWEX you can easily create your local APEX development environment consisting of Oracle Database 21c XE and Tomcat with ORDS. Your containers will be additionally secured via Let's Encrypt and nginx if you prefer when running on a virtual instance (ec2 or oci or droplet and so on).
 
 
 ---
@@ -11,111 +11,87 @@ With DOCKAWEX you can easily create your local APEX development environment cons
 
 - [Docker](https://www.docker.com)
 - [Docker-Compose](https://www.docker.com)
-- [AWS-CLI](https://aws.amazon.com/de/cli/) (optional)
+
 
 ## Download Software
 
-For licensing reasons, you must host or provide the software packages to be installed yourself.
+All tools will be downloaded during build. But you can change the Links in your environment file inside folder ```environments```. At the time of writing these lines the following packages are meant by that:
 
-
-File                                                 | What / Link
----------------------------------------------------- | -----------------------------------------------------------------------------------------------------------------------------------------------------------
-oracle-database-xe-18c-1.0-1.x86_64.rpm              | https://www.oracle.com/database/technologies/xe-downloads.html <br/>- Oracle DB 18c XE
-jre-8u271-linux-x64.tar.gz                           | https://javadl.oracle.com/webapps/download/AutoDL?BundleId=242050_3d5a2bb8f8d4428bbe94aed7ec7ae784 <br/>- JRE which will run tomcat
-apache-tomcat-8.5.59.tar.gz                          | http://mirror.23media.de/apache/tomcat/tomcat-8/v8.5.59/bin/apache-tomcat-8.5.59.tar.gz <br/>- Applicationserver, here will ORDS installed to
-ords-21.2.0.174.1826.zip                             | https://www.oracle.com/database/technologies/appdev/rest.html <br/>- Oracle REST Data Services, will provide access to APEX
-apex_21.1.zip                                        | https://www.oracle.com/tools/downloads/apex-downloads.html <br/>- APEX complete
-instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- Clientssoftware, to connect to oracle db
-instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip   | http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html <br/>- SQLPlus<br/>- install APEX and run your scripts and deployments
-p32598392_2110_Generic.zip                           | https://support.oracle.com/epmos/faces/PatchDetail?patchId=32598392 <br/>- Patchsetbundle to be installed alongside
-
-
-When you are building against **local** machine, you can pack all files into the directories called "_binaries"
-```shell
-infrastructure/docker/appsrv/_binaries
-  apache-tomcat-8.5.59.tar.gz
-  apex_21.1.zip
-  instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip
-  instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip
-  jre-8u271-linux-x64.tar.gz
-  ords-21.2.0.174.1826.zip
-  p32598392_2110_Generic.zip
-infrastructure/docker/oradb/_binaries
-  oracle-database-xe-18c-1.0-1.x86_64.rpm
+```bash
+  export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-21.3.1.301.2050.zip
+  export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
+  export URL_APEX=https://download.oracle.com/otn_software/apex/apex_21.2.zip
+  export URL_SQLCL=https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-21.1.1.113.1704.zipf
 ```
-From here all files are copied into the respective image.
-Otherwise when building against remote machine, load the files into a directory of your choice (your website, S3, ...) from where they must be accessible via http(s). The URL for downloading these files has to be placed in your corresponding env-file.
+
+### APEX Patchset
+If you want to install the current patchset of Oracle APEX you have to download it by your own and place it here `infrastructure/docker/appsrv/_binaries` https://support.oracle.com/epmos/faces/PatchDetail?patchId=32598392
+
 
 ## Local installation as development environment
 
-The configurations of the individual machines are stored in the "machines/*" directory. Here, each directory represents a machine. The local machine is also stored here. It is located in the folder **default**. Each directory must contain a .env - file. Here you have to store some configurations. Feel free to copy the **_template**-folder, rename it and change vars as you need.
-
-### 1. Modify environment vars inside machines/default/.env
+The configurations of the individual environments are stored in the "environments/" directory. Here, each *.env file represents an environment. Here you have to store some configurations. Feel free to copy the file `environments/_template/template.env` to environments/*.env. Or call script `remote.sh` with following parameters:
 
 ```bash
-# Binaries to use
-export DOWNLOAD_URL=https://your-url-pointing-to-binaries
+  ./remote.sh dev environments/my_new_environment.env new
+```
+This will copy the templatefile to that place. Here you have to take care of the parameters your propably want to change.
 
-export FILE_DB=oracle-database-xe-18c-1.0-1.x86_64.rpm
-export FILE_ORDS=ords-21.2.0.174.1826.zip
-export FILE_TOMCAT=apache-tomcat-8.5.59.tar.gz
-export FILE_APEX=apex_21.1.zip
-export FILE_SQLPLUS=instantclient-sqlplus-linux.x64-19.6.0.0.0dbru.zip
 
-export FILE_JRE=jre-8u271-linux-x64.tar.gz
-# if you extract the tar.gz this is the name of the directory inside
-export FILE_JRE_VERSION=jre1.8.0_271
+### 1. Modify environment vars inside environment file
 
-export FILE_CLIENT=instantclient-basiclite-linux.x64-19.6.0.0.0dbru.zip
-# if you extract the zip this is the name of the directory inside
-export FILE_INSTANT_CLIENT_VERION=instantclient_19_6
+```bash
+# URLs to get Installables
+export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-21.3.1.301.2050.zip
+export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
+export URL_APEX=https://download.oracle.com/otn_software/apex/apex_21.2.zip
+export URL_SQLCL=https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-21.1.1.113.1704.zip
 
-export FILE_APEX_PATCH=p32598392_2110_Generic.zip
-# if you extract the zip this is the name of the directory inside
-export APEX_PATCH=32598392
+# File for generic patch version, must be download from oracle support
+# and placed inside binary ex. p32598392_2110_Generic.zip
+export FILE_APEX_PATCH=
 
 # if you want do not want to use a CDN you should comment that out
-export APEX_IMAGE_PREFIX=https://static.oracle.com/cdn/apex/21.1.2/
-
+# ex. https://static.oracle.com/cdn/apex/21.1.2/
+export APEX_IMAGE_PREFIX=
 
 # Timezone
 export TIME_ZONE=Europe/Berlin
 
-# DB Passes
-export DB_SID=xepdb1
-export DB_PASSWORD=SecurePwd123
-export TOM_PASSWORD=SecurePwd123
-export ORDS_PASSWORD=SecurePwd123
+# DB Passes (internal=DB_PASSWORD+!)
+export DB_PASSWORD=
+export TOM_PASSWORD=
+export ORDS_PASSWORD=
 
 # APEX properties
-export APEX_USER=APEX_210100
-export INTERNAL_MAIL=your.admin-mail@somewhere.com
+export INTERNAL_MAIL=
 
 # mail properties
-export SMTP_HOST_ADDRESS=your.smtp-server.com
-export SMTP_FROM=default-from-name
-export SMTP_USERNAME=your-user
-export SMTP_PASSWORD=and-pwd
+export SMTP_HOST_ADDRESS=
+export SMTP_FROM=
+export SMTP_USERNAME=
+export SMTP_PASSWORD=
 
 
 ####### Following stuff is only used when using remote configuration #######
 
 # Point to and certificate
-export VIRTUAL_HOST=your.domain.com
-export LETSENCRYPT_HOST=your.domain.com
-export LETSENCRYPT_EMAIL=your.admin-mail@somewhere.com
+export VIRTUAL_HOST=
+export LETSENCRYPT_HOST=
+export LETSENCRYPT_EMAIL=
 # during test set to true because letsencrypt does not allow
 # more than 5 calls per week
 export LETSENCRYPT_TEST=false
 # with that info we say hello to our dyndns-service
 
 # APEX Appliction-Number to redirect on /
-APP_NUM=100
+export APP_NUM=100
 
 # curl to
-export DDNS_USER=your-ddns-user
-export DDNS_PASSWORD=with-password-when-using-curl
-export DDNS_URL=ddns.server.org
+export DDNS_USER=
+export DDNS_PASSWORD=
+export DDNS_URL=
+
 
 ```
 
@@ -156,10 +132,9 @@ apex_mail.send(p_from => '${SMTP_FROM}'
               ,p_body => 'Test Hey ho, that works');
 ```
 
-| Typ              | Link |
+| Typ              | Link                                      |
 |------------------|-------------------------------------------|
 | APEX             | http://localhost:8080/ords                |
-| DOOZLE           | http://localhost:9000                     |
 | SQLDeveloper Web | http://localhost:8080/ords/sql-developer  |
 | DB               | \<user>/\<pass>@localhost:1521/xepdb1     |
 
@@ -169,89 +144,63 @@ apex_mail.send(p_from => '${SMTP_FROM}'
 
 ## Remote installation for the public
 
-> docker-machine must be available on your client machine
+### Prerequisite
 
-On Windows 10:
-```bash
-$: if [[ ! -d "$HOME/bin" ]]; then mkdir -p "$HOME/bin"; fi && \
-curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-Windows-x86_64.exe > "$HOME/bin/docker-machine.exe" && \
-chmod +x "$HOME/bin/docker-machine.exe"
-```
+- create an compute instance on your cloud provider of choice. (OCI, AWS, DO, Azure, ...)
+- install git and docker inclusive docker-compose on that machine or use a template for that
+- configure firewall setting, so that this virtual machine is reachable by SSH, HTTP and HTTPS
+- login to your instance by using ssh or cloud shell
 
-Otherwise visit: https://github.com/docker/machine/releases/ for further instructions
-
----
-When using AWS:
-
-### Prerequisite [Create an AWS account and authorized user](_docs/prepare_aws.md)
-
-### 1a. Modify AWS Settings
-
-After you have installed and configured aws-cli and created an IAM user, you can now write your account parameters to an environment file **account-alias.env**.
-
-1. place a file inside provider subdirectory (provider/my-aws-settings.env).
-2. Set content to:
+### 1. Clone this repo
 
 ```bash
-ACCESS_KEY_ID=<Your AWS Access Key ID>
-SECRET_ACCESS_KEY=<Your AWS Secret Access Key>
-VPC_ID=<Your AWS VPC ID>
+$ git clone https://github.com/MaikMichel/dockawex.git
 ```
 
-When using DigitalOcean:
-
-### Prerequite [Create an DigitalOcean Account and API Token]
-
-### 1b.  Modify DO Settings
-
-After you have configured an API-TOKEN in DO, you can now write your account parameters to an environment file **account-alias.env**.
-
-1. place a file inside provider subdirectory (provider/my-do-settings.env).
-2. Set the content to:
+### 2. Change your working directory create an environment with the properties you prefer
 
 ```bash
-DRIVER_TYPE=OCEAN
-export OCEAN_TOKEN=<your token>
-export OCEAN_TAG=<your tag>
+$ cd dockawex
+# create env file
+dockawex$> ./remote.sh full environments/my_env.env new
+
+# edit env file
+dockawex$> vi environments/my_env.env
 ```
 
+### 3. Build images
 
-### 2. Create a copy of the directory "_template" an name it descriptive e.g.  your-machine
+```bash
+# build docker images
+dockawex$> ./remote.sh full environments/my_env.env build
+```
 
-### 3. Modify environment vars inside machines/your-machine/.env
+### 4. Start images
+```bash
+# start images
+dockawex$> ./remote.sh full environments/my_env.env start
 
-This is like the local section mention above. Just set your vars.
+# view logs of installtions
+dockawex$> ./remote.sh full environments/my_env.env logs
 
-### 4. Call script **remote.sh** to manage your remote setup
+```
 
-1. change your working directory to the machines path: ```cd dockawex```
-2. create machine: ```dockawex$> ./remote.sh full switch provider/your-do-settings.env my-droplet create```
-3. build images: ```dockawex$> ./remote.sh full switch provider/your-do-settings.env my-droplet build```
-4. build images: ```dockawex$> ./remote.sh full switch provider/your-do-settings.env my-droplet start```
+On first start APEX will be installed and let's encrypt acme-challenge will be executed.
 
 > More parameters will be displayed if you omit the parameters. ```dockawex$> ./remote.sh```
 
 ```bash
-  $ ./remote.sh
-  Usage ./remote.sh full|dev switch|no_switch machine-prov-file machine-name command
+  dockawex$ ./remote.sh
+  Usage $0 full|dev environment-file command
 
   full|dev
     > full: all containers (nginx, letsencrypt)
     > dev:  only db, appsrv and node-proxy
 
-  switch|no_switch
-    > switch: use docker-machine to switch to machine
-    > no_switch: without remote-compose (nginx, letsencrypt)
-
-  machine-prov-file
-    > file used by docker-machine driver (aws, digitalocean)
-      if not exists then no machine will be created
-
-  machine-name
-    > name of ec2-instance / droplet
+  environment
+    > path to environment file ex: environments/demo.env
 
   command
-    > create > creates only ec2-instance
     > build  > builds only images
     > start  > start images / containers
     > run    > creates, builds and start images / containers
@@ -262,12 +211,11 @@ This is like the local section mention above. Just set your vars.
     > print  > print compose call
     > stop   > stops services
     > clear  > clears services
-    > remove > remove machine
     > exec   > calls compose only and attach params
+    > new    > generates new environment file base on environment parameter
 ```
 
-ready...
-Check https://your-sub.domain.de/ords APEX is waiting ...
+Check https://your-sub.domain.de/ords APEX is waiting ..
 > Check https://your-sub.domain.de YOUR APP is waiting (see $APP_NUM)
 
 ---
@@ -276,10 +224,7 @@ Check https://your-sub.domain.de/ords APEX is waiting ...
 1. What is the password to internal?
 > It is the same as for the user sys, except with an exclamation mark at the end!
 
-2. How can I use machines on PC2 when the are created on PC1?
-> see: https://www.npmjs.com/package/machine-share
-
-3. What are the login-credentials when using SQL Developer Web?
+2. What are the login-credentials when using SQL Developer Web?
 > you have to REST enable the database-schema
 ``` sql
   begin
