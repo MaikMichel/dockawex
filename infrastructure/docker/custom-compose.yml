@@ -5,30 +5,19 @@ version: '3.7'
 # and define some user data
 services:
   oradb:
-    build:
-      args:
-        - DOWNLOAD_URL=${DOWNLOAD_URL}
-        - FILE_DB=${FILE_DB}
-        - DB_PASSWORD=${DB_PASSWORD}
     container_name: ${CONTAINER_PREFIX}_oradb_1
     environment:
-      - DB_PASSWORD=${DB_PASSWORD}
       - TZ=${TIME_ZONE}
+      - ORACLE_PASSWORD=${DB_PASSWORD}
 
   appsrv:
     build:
       args:
-        - DOWNLOAD_URL=${DOWNLOAD_URL}        
-        - FILE_JRE=${FILE_JRE}
-        - FILE_JRE_VERSION=${FILE_JRE_VERSION}
-        - FILE_ORDS=${FILE_ORDS}
-        - FILE_TOMCAT=${FILE_TOMCAT}
-        - FILE_APEX=${FILE_APEX}
-        - FILE_CLIENT=${FILE_CLIENT}
-        - FILE_SQLPLUS=${FILE_SQLPLUS}
-        - FILE_INSTANT_CLIENT_VERION=${FILE_INSTANT_CLIENT_VERION}
+        - URL_ORDS=${URL_ORDS}
+        - URL_TOMCAT=${URL_TOMCAT}
+        - URL_APEX=${URL_APEX}
+        - URL_SQLCL=${URL_SQLCL}
         - FILE_APEX_PATCH=${FILE_APEX_PATCH}
-        - APEX_PATCH=${APEX_PATCH}
         - APEX_IMAGE_PREFIX=${APEX_IMAGE_PREFIX}
         # Pwd used in tomcat
         - TOM_PASSWORD=${TOM_PASSWORD}
@@ -37,9 +26,9 @@ services:
       # this is used for sys
       - DB_PASSWORD=${DB_PASSWORD}
       # all ORDS passes
-      - ORDS_PASSWORD=${ORDS_PASSWORD}      
-      # what APEX user we will use (Version)
-      - APEX_USER=${APEX_USER}
+      - ORDS_PASSWORD=${ORDS_PASSWORD}
+      # APEX PatchSetBundle located in binaries
+      - FILE_APEX_PATCH=${FILE_APEX_PATCH}
       # admin email for internal workspace
       - INTERNAL_MAIL=${INTERNAL_MAIL}
       # email settings for instance
@@ -49,6 +38,7 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       # TimeZone
       - TZ=${TIME_ZONE}
+      # NginX and LetsEncrypt
       - VIRTUAL_HOST=${VIRTUAL_HOST}
       - LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
@@ -61,7 +51,3 @@ services:
       - DDNS_URL=${DDNS_URL}
       # at least we route on slash to the following application-id
       - APP_NUM=${APP_NUM}
-
-  nodeprx:
-    container_name: ${CONTAINER_PREFIX}_nodeprx_1
-    

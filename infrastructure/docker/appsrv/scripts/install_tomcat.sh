@@ -1,13 +1,17 @@
 #!/bin/bash
 
-cd /files
+exec >> >(tee -ai /docker_log.txt)
+exec 2>&1
 
-echo "unpacking tomcat: tar -xzf $FILE_TOMCAT"
-tar -xzf $FILE_TOMCAT
+echo "unpacking tomcat"
+tar xzf /files/tomcat.tgz -C /tmp
 
-FILE_TOMCAT_WITHOUT_EXT=${FILE_TOMCAT/.tar.gz/}
-echo "move /files/$FILE_TOMCAT_WITHOUT_EXT /tomcat"
-mv /files/$FILE_TOMCAT_WITHOUT_EXT /tomcat
+TOMCAT_VERSION=9.0.54
+echo "moving tomcat from /tmp/apache-tomcat-${TOMCAT_VERSION}  to /tomca"
+mv /tmp/apache-tomcat-${TOMCAT_VERSION} /tomcat
+
+echo "clearing up tomcat"
+rm /tmp/tomcat.tgz
 
 
 rm -rf /tomcat/webapps/docs
@@ -36,7 +40,7 @@ mv /scripts/HTTP521.html /tomcat/webapps/ROOT/HTTP521.html
 mv /scripts/HTTP533.html /tomcat/webapps/ROOT/HTTP533.html
 
 
-mv /scripts/tomcat8 /etc/init.d/tomcat
+mv /scripts/tomcat9 /etc/init.d/tomcat
 chmod 755 /etc/init.d/tomcat
 update-rc.d tomcat defaults  80 01
 

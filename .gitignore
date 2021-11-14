@@ -13,29 +13,15 @@ jspm_packages
 .AppleDouble
 .LSOverride
 
-# no backups inside git
-machines/*/last_backup.sql
-machines/*/*_backup_*.sql
-machines/*/*_backup_*.dmp
-
 # binaries to copy when
 infrastructure/docker/appsrv/_binaries_tmp/*
 !infrastructure/docker/appsrv/_binaries_tmp/note_tmp.md
 infrastructure/docker/appsrv/_binaries/*
 !infrastructure/docker/appsrv/_binaries/note.md
 
-infrastructure/docker/oradb18xe/_binaries_tmp/*
-!infrastructure/docker/oradb18xe/_binaries_tmp/note_tmp.md
-infrastructure/docker/oradb18xe/_binaries/*
-!infrastructure/docker/oradb18xe/_binaries/note.md
-
-# providers
-provider/*.env
-!provider/example-*.env
-
-#machines
-machines/*
-!machines/_template
+#environments
+environments/*
+!environments/_template
 
 #binary-files
 files/*

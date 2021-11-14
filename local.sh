@@ -22,27 +22,9 @@ if [ $# -lt 1 ]; then
   echo
 	exit 1
 fi
-# default is machine-name for local
-EC2_NAME="default"
-SWITCH="switch"
 
 COMMAND=$1
 OPTION=$2
 
-case $(uname | tr '[:upper:]' '[:lower:]') in
-linux*)
-  SWITCH="no_switch"
-;;
-darwin*)
-  SWITCH="no_switch"
-;;
-mingw64_nt-10*)
-  SWITCH="no_switch"
-;;
-*)
-  echo "executing defaults "
-;;
-esac
-
 # call remote
-./remote.sh dev ${SWITCH} doesntmatter ${EC2_NAME} ${COMMAND} ${OPTION}
+./remote.sh dev environments/local.env ${COMMAND} ${OPTION}

@@ -1,44 +1,22 @@
 #!/bin/bash
 
-url_files=(    
-  ${FILE_JRE}
-  ${FILE_ORDS}
-  ${FILE_TOMCAT}
-  ${FILE_APEX}
-  ${FILE_CLIENT}
-  ${FILE_SQLPLUS}
-  ${FILE_APEX_PATCH}
-)
+exec >> >(tee -ai /docker_log.txt)
+exec 2>&1
 
-downloadFiles() {
-  local url=${DOWNLOAD_URL}
-  local i=1
+# downloadFiles
+echo "downloading files"
+curl -# --retry 6 -m 1800 --create-dirs -o /files/tomcat.tgz ${URL_TOMCAT}
+curl -# --retry 6 -m 1800 --create-dirs -o /files/ords.zip ${URL_ORDS}
+curl -# --retry 6 -m 1800 --create-dirs -o /files/apex.zip ${URL_APEX}
+# curl -# --retry 6 -m 1800 --create-dirs -o /files/sqlcl.zip ${URL_SQLCL}
 
 
-  for file in "${url_files[@]}"; do
-    if [ ! -f /files/${file} ]; then 
-      echo "/files/${file} does not exists"
-      echo "[Downloading '$file' (file $i/${#url_files[@]}) from '$url/$file']"
-      curl -# --retry 6 -m 1800 --create-dirs -o /files/$file -L -C - $url/$file
-    else
-      echo "/files/${file} does exists"
-    fi
 
-    i=$((i + 1))
-  done
-  
-}
+# if now one file is missing, we have to quit... || [ ! -f /files/sqlcl.zip ]
+if [ ! -f /files/tomcat.tgz ] || [ ! -f /files/ords.zip ] || [ ! -f /files/apex.zip ]; then
+    # just proof
+  ls -la /files
 
-downloadFiles
-
-ls -la /files
-
-# if now one file is missing, we have to quit...
-if [ ! -f /files/${FILE_JRE} ] || [ ! -f /files/${FILE_ORDS} ] || [ ! -f /files/${FILE_TOMCAT} ] || [ ! -f /files/${FILE_APEX} ] || [ ! -f /files/${FILE_CLIENT} ] || [ ! -f /files/${FILE_SQLPLUS} ]; then  
   echo "not all requiered files found. aborting"
   exit 1
 fi
-
-echo "Extracting instantclient"
-unzip -q /files/${FILE_CLIENT} -d /
-unzip -q /files/${FILE_SQLPLUS} -d /

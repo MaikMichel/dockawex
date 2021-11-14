@@ -1,27 +1,18 @@
 #!/bin/bash
 
 # All Params are required
-if [ $# -lt 5 ]; then
+if [ $# -lt 3 ]; then
   echo
-  echo "Usage $0 full|dev switch|no_switch machine-prov-file machine-name command"
+  echo "Usage $0 full|dev environment-file command"
   echo
   echo "  full|dev "
   echo "    > full: all containers (nginx, lets'encrypt)"
   echo "    > dev:  only db, appsrv and node-proxy"
   echo
-  echo "  switch|no_switch "
-  echo "    > switch: use docker-machine to switch to machine"
-  echo "    > no_switch: without remote-compose (nginx, lets'encrypt)"
-  echo
-  echo "  machine-prov-file "
-  echo "    > file used by docker-machine driver (aws, digitalocean)"
-  echo "      if not exists then no machine will be created"
-  echo
-  echo "  machine-name "
-  echo "    > name of ec2-instance / droplet"
+  echo "  environment "
+  echo "    > path to environment file ex: environments/demo.env "
   echo
   echo "  command "
-  echo "    > create > creates only ec2-instance"
   echo "    > build  > builds only images"
   echo "    > start  > start images / containers "
   echo "    > run    > creates, builds and start images / containers "
@@ -32,37 +23,36 @@ if [ $# -lt 5 ]; then
   echo "    > print  > print compose call"
   echo "    > stop   > stops services"
   echo "    > clear  > clears services"
-  echo "    > remove > remove machine"
   echo "    > exec   > calls compose only and attach params"
-  echo "    > new    > generates new machine folder with default.env"
+  echo "    > new    > generates new environment file base on environment parameter"
   echo
   echo
   exit 1
 fi
 
 STACK=$1
-SWITCH=$2
-MACHINE_PROVIDER=$3
-MACHINE_NAME=$4
-COMMAND=$5
-OPTION=$6
+ENV_FILE=$2
+COMMAND=$3
+OPTION=$4
 
-export CONTAINER_PREFIX=${MACHINE_NAME}
+
+CONTAINER_PREFIX=${ENV_FILE##*/}
+CONTAINER_PREFIX=${CONTAINER_PREFIX%.*}
+export CONTAINER_PREFIX=${CONTAINER_PREFIX}
 
 # path
 INFRA_PATH="infrastructure"
 
 if [ "${STACK}" == "full" ]
 then
-  COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/docker-compose-remote.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
+  COMPOSE_COMMAND="docker-compose -p ${CONTAINER_PREFIX} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/docker-compose-remote.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
 else
-  COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
-  #COMPOSE_COMMAND="docker-compose -p ${MACHINE_NAME} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/docker-compose-local.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
+  COMPOSE_COMMAND="docker-compose -p ${CONTAINER_PREFIX} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
 fi
 
-if [ ! -f "machines/${MACHINE_NAME}/.env" ]
+if [ ! -f "${ENV_FILE}" ]
 then
-  echo "Machine: ${MACHINE_NAME} not found inside machines."
+  echo "Environment-File: ${ENV_FILE} not found"
 
   while true; do
     read -p "Should I create a basic configuration? y/n?" yn
@@ -72,88 +62,45 @@ then
         * ) echo "Please answer yes or no.";;
     esac
   done
-  
-  [ ! -d "machines/${MACHINE_NAME}" ] && mkdir "machines/${MACHINE_NAME}"  
-  cat machines/_template/.env > "machines/${MACHINE_NAME}/.env"
-  echo "Configuration create in machines/${MACHINE_NAME}/.env"  
-  echo "Please fullfill desired properties and run that script again"
+
+
+fi
+
+source ${ENV_FILE}
+
+new() {
+
+  if [[ ! -d "$(dirname ${ENV_FILE})" ]]; then
+    mkdir -p "$(dirname ${ENV_FILE})"
+  fi
+
+  cat environments/_template/.env > "${ENV_FILE}"
+  echo "Configuration create in ${ENV_FILE}"
+  echo "Please fullfill desired properties and run this script again"
   exit 0
-fi
-
-
-if [ -e ${MACHINE_PROVIDER} ]
-then
-  source ${MACHINE_PROVIDER}
-fi
-
-
-source machines/${MACHINE_NAME}/.env
-
-
-switch_to_machine(){
-  if [[ "$SWITCH" != "no_switch" ]]
-  then    
-    echo "Switching to machine: ${MACHINE_NAME}"
-    docker-machine env --shell bash ${MACHINE_NAME}
-    eval $(docker-machine env --shell bash ${MACHINE_NAME})
-  fi
-}
-
-
-create_machine() {
-  if ( [[ "$MACHINE_NAME" != "default" ]] && [[ -e ${MACHINE_PROVIDER} ]] )
-  then
-    echo "Creating machine: ${MACHINE_NAME} / DriverType: $DRIVER_TYPE"
-    if [ "$DRIVER_TYPE" == "AWS" ]
-    then
-      ${INFRA_PATH}/create_ec2_instance.sh ${ACCESS_KEY_ID} ${SECRET_ACCESS_KEY} ${VPC_ID} ${MACHINE_NAME} ${EC2_TAG}
-    else
-      ${INFRA_PATH}/create_drp_instance.sh ${OCEAN_TOKEN} ${MACHINE_NAME} ${OCEAN_TAG}
-    fi
-  else
-    echo "Machine $MACHINE_NAME will not be created"
-    if ! [[ -e ${MACHINE_PROVIDER} ]]
-    then
-      echo "File ${MACHINE_PROVIDER} does not exist"
-    fi
-  fi
 }
 
 build_images() {
 
-  if [ "$MACHINE_NAME" != "default" ]
+  if [ "$CONTAINER_PREFIX" != "local" ]
   then
-    mv ${INFRA_PATH}/docker/appsrv/_binaries/* ${INFRA_PATH}/docker/appsrv/_binaries_tmp 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb18xe/_binaries/* ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb11xe/_binaries/* ${INFRA_PATH}/docker/oradb11xe/_binaries_tmp 2>/dev/null
-
-    mv ${INFRA_PATH}/docker/appsrv/_binaries_tmp/note.md ${INFRA_PATH}/docker/appsrv/_binaries 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp/note.md ${INFRA_PATH}/docker/oradb18xe/_binaries 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb11xe/_binaries_tmp/note.md ${INFRA_PATH}/docker/oradb11xe/_binaries 2>/dev/null
+    mv ${INFRA_PATH}/docker/appsrv/_binaries/* ${INFRA_PATH}/docker/appsrv/_binaries_tmp/ 2>/dev/null
+    mv ${INFRA_PATH}/docker/appsrv/_binaries_tmp/note.md ${INFRA_PATH}/docker/appsrv/_binaries/ 2>/dev/null
   else
-    mv ${INFRA_PATH}/docker/appsrv/_binaries_tmp/* ${INFRA_PATH}/docker/appsrv/_binaries 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp/* ${INFRA_PATH}/docker/oradb18xe/_binaries 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb11xe/_binaries_tmp/* ${INFRA_PATH}/docker/oradb11xe/_binaries 2>/dev/null
-
-    mv ${INFRA_PATH}/docker/appsrv/_binaries/note_tmp.md ${INFRA_PATH}/docker/appsrv/_binaries_tmp 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb18xe/_binaries/note_tmp.md ${INFRA_PATH}/docker/oradb18xe/_binaries_tmp 2>/dev/null
-    mv ${INFRA_PATH}/docker/oradb11xe/_binaries/note_tmp.md ${INFRA_PATH}/docker/oradb11xe/_binaries_tmp 2>/dev/null
+    mv ${INFRA_PATH}/docker/appsrv/_binaries_tmp/* ${INFRA_PATH}/docker/appsrv/_binaries/ 2>/dev/null
+    mv ${INFRA_PATH}/docker/appsrv/_binaries/note_tmp.md ${INFRA_PATH}/docker/appsrv/_binaries_tmp/ 2>/dev/null
   fi
 
-  switch_to_machine
 
   # build images
-  echo "Building images for machine: ${MACHINE_NAME}"
+  echo "Building images for environment: ${ENV_FILE}"
   ${COMPOSE_COMMAND} build ${OPTION}
 }
 
 
 start_services() {
-  switch_to_machine
-    
   # startup containers
-  echo "Building starting containers ${OPTION} for machine: ${MACHINE_NAME}"
-  #echo "${COMPOSE_COMMAND} up -d ${OPTION}"
+  echo "Building starting containers ${OPTION} for environment: ${ENV_FILE}"
   ${COMPOSE_COMMAND} up -d ${OPTION}
 
   echo_log
@@ -164,21 +111,19 @@ echo_log(){
   echo ""
 
   # only on remote you are able tu renew certificates
-  if [ "$MACHINE_NAME" != "default" ]
+  if [ "$CONTAINER_PREFIX" != "local" ]
   then
-    echo "view log-output enter   : ./remote.sh ${STACK} ${SWITCH} ${MACHINE_PROVIDER} ${MACHINE_NAME} logs"
-    echo "renew certificates enter: ./remote.sh ${STACK} ${SWITCH} ${MACHINE_PROVIDER} ${MACHINE_NAME} renew"
+    echo "view log-output enter   : ./remote.sh ${STACK} ${ENV_FILE} logs"
+    echo "renew certificates enter: ./remote.sh ${STACK} ${ENV_FILE} renew"
     echo
-    echo "On first start you should call ./remote.sh ${STACK} ${SWITCH} ${MACHINE_PROVIDER} ${MACHINE_NAME} nginx"
-    echo "to set vhosd.d"
+    echo "On first start you should call ./remote.sh ${STACK} ${ENV_FILE} nginx"
+    echo "to set vhost.d"
   else
     echo "view log-output enter   : ./local.sh logs"
   fi
 }
 
 log_services() {
-  switch_to_machine
-
   # logs -f
   if [ -z "$OPTION" ]
   then
@@ -189,23 +134,16 @@ log_services() {
 }
 
 list_services() {
-  switch_to_machine
-
   ${COMPOSE_COMMAND} ps
 }
 
 renew_certificate() {
-  switch_to_machine
-
   # renew cert
   ${COMPOSE_COMMAND} exec letsencrypt-nginx-proxy ./force_renew
 }
 
 writenginx() {
-  switch_to_machine
-
   ${COMPOSE_COMMAND} restart nginx-proxy
-  
 }
 
 
@@ -213,9 +151,7 @@ view_config() {
   ${COMPOSE_COMMAND} config
 }
 
-clear_machine() {
-  switch_to_machine
-
+clear() {
   while true; do
     read -p "All containers, images, volume will be removed!!! Are you sure? y/n?" yn
     case $yn in
@@ -234,36 +170,19 @@ clear_machine() {
 
 }
 
-remove_machine() {
-  # we won't remove your default
-  if [ "$MACHINE_NAME" != "default" ]
-  then
-    docker-machine rm -f ${MACHINE_NAME}
-  fi
-
-  # eval $(docker-machine env -u)
-}
-
 print_compose() {
   echo ${COMPOSE_COMMAND}
 }
 
 stop_services() {
-  switch_to_machine
-
   ${COMPOSE_COMMAND} stop
 }
 
 exec_services() {
-  switch_to_machine
-
   ${COMPOSE_COMMAND} $OPTION
 }
 
 case ${COMMAND} in
-  'create')
-    create_machine
-    ;;
   'build')
     build_images
     ;;
@@ -271,7 +190,6 @@ case ${COMMAND} in
     start_services
     ;;
   'run')
-    create_machine
     build_images
     start_services
     ;;
@@ -284,11 +202,8 @@ case ${COMMAND} in
   'config')
     view_config
     ;;
-  'remove')
-    remove_machine
-    ;;
   'clear')
-    clear_machine
+    clear
     ;;
   'print')
     print_compose
@@ -304,6 +219,9 @@ case ${COMMAND} in
     ;;
   'nginx')
     writenginx
+    ;;
+  'new')
+    new
     ;;
   *)
     ${COMMAND}

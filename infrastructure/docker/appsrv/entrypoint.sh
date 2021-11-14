@@ -12,7 +12,7 @@ else
 fi
 
 
-export SQLPLUS=/${FILE_INSTANT_CLIENT_VERION}/sqlplus
+export SQLPLUS=sqlplus
 # SQLPLUS_ARGS="sys/${DB_PASSWORD}@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(Host=${DB_HOST})(Port=${DB_PORT}))(CONNECT_DATA=(SERVICE=${DB_SID}))) as sysdba"
 SQLPLUS_ARGS="sys/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_SID} as sysdba"
 
@@ -45,11 +45,11 @@ while [  $COUNTER -lt 20 ]; do
   DB_IS_RW_MODE=$(is_pdb_in_read_write_mode)
 
   echo "Oracle RW Mode: '${DB_IS_RW_MODE}'"
-  if [ "${DB_IS_RW_MODE}" = "true" ]
-  then
+  if [[ "${DB_IS_RW_MODE}" =~ "true" ]]; then
     echo "Database Connetion is OK"
     let COUNTER=20
   else
+    echo "waiting ..."
     let COUNTER=COUNTER+1
     sleep 60s
   fi
