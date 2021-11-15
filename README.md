@@ -45,7 +45,6 @@ This will copy the templatefile to that place. Here you have to take care of the
 export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-21.3.1.301.2050.zip
 export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
 export URL_APEX=https://download.oracle.com/otn_software/apex/apex_21.2.zip
-export URL_SQLCL=https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-21.1.1.113.1704.zip
 
 # File for generic patch version, must be download from oracle support
 # and placed inside binary ex. p32598392_2110_Generic.zip
@@ -108,8 +107,9 @@ At http://localhost:8080/ords APEX is waiting for you
 More parameters will be displayed if you omit the parameters.
 ```bash
   $ ./local.sh
+
   Please call script by using all params in this order!
-      ././local.sh command
+    ./local.sh command
   -----------------------------------------------------
 
     command
@@ -191,7 +191,8 @@ On first start APEX will be installed and let's encrypt acme-challenge will be e
 
 ```bash
   dockawex$ ./remote.sh
-  Usage $0 full|dev environment-file command
+
+  Usage remote.sh full|dev environment-file command
 
   full|dev
     > full: all containers (nginx, letsencrypt)
