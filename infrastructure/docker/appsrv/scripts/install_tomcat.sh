@@ -42,7 +42,7 @@ mv /scripts/HTTP533.html /tomcat/webapps/ROOT/HTTP533.html
 
 mv /scripts/tomcat9 /etc/init.d/tomcat
 chmod 755 /etc/init.d/tomcat
-update-rc.d tomcat defaults  80 01
+
 
 echo "tomcat installed"
 
