@@ -10,7 +10,3 @@ set -x && ./scripts/download_files.sh
 echo "--------------------------------------------------"
 echo "Installing TOMCAT................................."
 ./scripts/install_tomcat.sh
-
-# echo "--------------------------------------------------"
-# echo "Installing SQLCL.................................."
-# ./scripts/install_sqlcl.sh

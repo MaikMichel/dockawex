@@ -16,7 +16,6 @@ services:
         - URL_ORDS=${URL_ORDS}
         - URL_TOMCAT=${URL_TOMCAT}
         - URL_APEX=${URL_APEX}
-        - URL_SQLCL=${URL_SQLCL}
         - FILE_APEX_PATCH=${FILE_APEX_PATCH}
         - APEX_IMAGE_PREFIX=${APEX_IMAGE_PREFIX}
         # Pwd used in tomcat

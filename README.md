@@ -21,7 +21,6 @@ All tools will be downloaded during build. But you can change the Links in your 
   export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-21.3.1.301.2050.zip
   export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
   export URL_APEX=https://download.oracle.com/otn_software/apex/apex_21.2.zip
-  export URL_SQLCL=https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-21.1.1.113.1704.zipf
 ```
 
 ### APEX Patchset
