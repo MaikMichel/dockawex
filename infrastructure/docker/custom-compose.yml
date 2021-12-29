@@ -16,7 +16,7 @@ services:
         - URL_ORDS=${URL_ORDS}
         - URL_TOMCAT=${URL_TOMCAT}
         - URL_APEX=${URL_APEX}
-        - FILE_APEX_PATCH=${FILE_APEX_PATCH}
+        - URL_APEX_PATCH=${URL_APEX_PATCH}
         - APEX_IMAGE_PREFIX=${APEX_IMAGE_PREFIX}
         # Pwd used in tomcat
         - TOM_PASSWORD=${TOM_PASSWORD}
@@ -26,8 +26,6 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       # all ORDS passes
       - ORDS_PASSWORD=${ORDS_PASSWORD}
-      # APEX PatchSetBundle located in binaries
-      - FILE_APEX_PATCH=${FILE_APEX_PATCH}
       # admin email for internal workspace
       - INTERNAL_MAIL=${INTERNAL_MAIL}
       # email settings for instance

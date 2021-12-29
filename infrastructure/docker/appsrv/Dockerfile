@@ -44,20 +44,17 @@ ARG TOM_PASSWORD=${TOM_PASSWORD}
 ARG URL_ORDS=${URL_ORDS}
 ARG URL_TOMCAT=${URL_TOMCAT}
 ARG URL_APEX=${URL_APEX}
-ARG FILE_APEX_PATCH=${FILE_APEX_PATCH}
+ARG URL_APEX_PATCH=${URL_APEX_PATCH}
 ARG APEX_IMAGE_PREFIX=${APEX_IMAGE_PREFIX}
 
 ENV URL_ORDS=${URL_ORDS} \
     URL_TOMCAT=${URL_TOMCAT} \
     URL_APEX=${URL_APEX} \
-    FILE_APEX_PATCH=${FILE_APEX_PATCH} \
+    URL_APEX_PATCH=${URL_APEX_PATCH} \
     APEX_IMAGE_PREFIX=${APEX_IMAGE_PREFIX}
 
 # all installation files
 COPY scripts /scripts
-
-# Copy files
-COPY _binaries /files
 
 # start the installation
 RUN set -x && chmod +x /scripts/*.sh; sync && /scripts/install_main.sh

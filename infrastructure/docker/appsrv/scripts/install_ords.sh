@@ -1,5 +1,6 @@
 #!/bin/bash
 target_dir=/u01/apps
+FILE_APEX_PATCH=apex_patch.zip
 
 echo "Extracting Ords"
 mkdir ${target_dir}/ords

@@ -1,5 +1,2 @@
 .git
 .gitignore
-
-# binaries to copy when local
-_binaries_tmp

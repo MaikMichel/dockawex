@@ -24,8 +24,10 @@ All tools will be downloaded during build. But you can change the Links in your 
 ```
 
 ### APEX Patchset
-If you want to install the current patchset of Oracle APEX you have to download it by your own and place it here `infrastructure/docker/appsrv/_binaries` https://support.oracle.com/epmos/faces/PatchDetail?patchId=32598392
-
+If you want to install the current patchset of Oracle APEX you have to download it by your own https://support.oracle.com/epmos/faces/PatchDetail?patchId=32598392 and place it into a reachable URL:
+```bash
+export URL_APEX_PATCH=https://somewhere-out-there-where-you-can-place-some-file-temporaly.somewhere
+```
 
 ## Local installation as development environment
 
@@ -46,8 +48,8 @@ export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.54/bin/ap
 export URL_APEX=https://download.oracle.com/otn_software/apex/apex_21.2.zip
 
 # File for generic patch version, must be download from oracle support
-# and placed inside binary ex. p32598392_2110_Generic.zip
-export FILE_APEX_PATCH=
+# and uploaded to a reachable url (ObjectStorage, S3, ...)
+export URL_APEX_PATCH=
 
 # if you want do not want to use a CDN you should comment that out
 # ex. https://static.oracle.com/cdn/apex/21.1.2/

@@ -3,6 +3,8 @@
 export SQLPLUS=sqlplus
 SQLPLUS_ARGS="sys/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_SID} as sysdba"
 target_dir=/u01/apps
+FILE_APEX_PATCH=apex_patch.zip
+
 
 is_pdb_in_read_write_mode () {
     $SQLPLUS -S -L $SQLPLUS_ARGS <<!

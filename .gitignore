@@ -13,12 +13,6 @@ jspm_packages
 .AppleDouble
 .LSOverride
 
-# binaries to copy when
-infrastructure/docker/appsrv/_binaries_tmp/*
-!infrastructure/docker/appsrv/_binaries_tmp/note_tmp.md
-infrastructure/docker/appsrv/_binaries/*
-!infrastructure/docker/appsrv/_binaries/note.md
-
 #environments
 environments/*
 !environments/_template
