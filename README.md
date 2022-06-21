@@ -18,9 +18,9 @@ With DOCKAWEX you can easily create your local APEX development environment cons
 All tools will be downloaded during build. But you can change the Links in your environment file inside folder ```environments```. At the time of writing these lines the following packages are meant by that:
 
 ```bash
-  export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-21.3.1.301.2050.zip
-  export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
-  export URL_APEX=https://download.oracle.com/otn_software/apex/apex_21.2.zip
+  export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-22.1.1.133.1148.zip
+  export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.64/bin/apache-tomcat-9.0.64.tar.gz
+  export URL_APEX=https://download.oracle.com/otn_software/apex/apex_22.1.zip
 ```
 
 ### APEX Patchset
@@ -43,16 +43,16 @@ This will copy the templatefile to that place. Here you have to take care of the
 
 ```bash
 # URLs to get Installables
-export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-21.3.1.301.2050.zip
-export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
-export URL_APEX=https://download.oracle.com/otn_software/apex/apex_21.2.zip
+export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-22.1.1.133.1148.zip
+export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.64/bin/apache-tomcat-9.0.64.tar.gz
+export URL_APEX=https://download.oracle.com/otn_software/apex/apex_22.1.zip
 
 # File for generic patch version, must be download from oracle support
 # and uploaded to a reachable url (ObjectStorage, S3, ...)
 export URL_APEX_PATCH=
 
 # if you want do not want to use a CDN you should comment that out
-# ex. https://static.oracle.com/cdn/apex/21.1.2/
+# ex. https://static.oracle.com/cdn/apex/22.1.0/
 export APEX_IMAGE_PREFIX=
 
 # Timezone

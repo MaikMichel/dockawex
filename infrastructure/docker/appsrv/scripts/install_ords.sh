@@ -1,25 +1,38 @@
 #!/bin/bash
-target_dir=/u01/apps
+target_dir="/u01/apps"
 FILE_APEX_PATCH=apex_patch.zip
 
+
 echo "Extracting Ords"
-mkdir ${target_dir}/ords
-unzip -q -o /files/ords.zip -d ${target_dir}/ords/
 
-sed -i -E 's:DB_PASSWORD:'$DB_PASSWORD':g' /scripts/ords_params.properties
-sed -i -E 's:ORDS_PASSWORD:'$ORDS_PASSWORD':g' /scripts/ords_params.properties
-sed -i -E 's:DB_HOST:'$DB_HOST':g' /scripts/ords_params.properties
-sed -i -E 's:DB_SID:'$DB_SID':g' /scripts/ords_params.properties
+mkdir -p ${ORDS_HOME}
+cd ${ORDS_HOME}
 
-cp -rf /scripts/ords_params.properties ${target_dir}/ords/params
+unzip -oq /files/ords.zip
+mkdir -p ${ORDS_CONF}/logs
 
-cd ${target_dir}/ords
-java -jar ords.war configdir ${target_dir}
-java -jar ords.war install
-java -jar ords.war set-property security.verifySSL false
 
-cp -rf ${target_dir}/ords/ords.war /tomcat/webapps/
-cp -rf ${target_dir}/apex/images /tomcat/webapps/i
+export ORDS_CONFIG=${ORDS_CONF}
+${ORDS_HOME}/bin/ords --config ${ORDS_CONF} install \
+      --log-folder ${ORDS_CONF}/logs \
+      --admin-user SYS \
+      --db-hostname ${DB_HOST} \
+      --db-port ${DB_PORT} \
+      --db-servicename ${DB_SID} \
+      --feature-db-api true \
+      --feature-rest-enabled-sql true \
+      --feature-sdw true \
+      --gateway-mode proxied \
+      --gateway-user APEX_PUBLIC_USER \
+      --proxy-user \
+      --password-stdin <<EOF
+${DB_PASSWORD}
+${ORDS_PASSWORD}
+EOF
+
+  cp ords.war /tomcat/webapps/
+  cp -rf ${target_dir}/apex/images /tomcat/webapps/i
+
 
 # when patch included, it has been unzipped, now install it too
 if [ -f /files/$FILE_APEX_PATCH ]

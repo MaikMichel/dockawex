@@ -11,21 +11,26 @@ oracle-instantclient-release-el8 python3 && \
 microdnf update -y && \
 microdnf install oracle-instantclient-basic oracle-instantclient-sqlplus && \
 rm -Rf /var/cache/yum && \
-rm -Rf /var/cache/dnf
+rm -Rf /var/cache/dnf && \
+echo 'alias ll="ls -la"' >> ~/.bashrc
 
 # here are our db connection values
 ENV DB_PASSWORD=${DB_PASSWORD:-secret} \
     DB_HOST=${DB_HOST:-localhost} \
     DB_PORT=${DB_PORT:-1521} \
     DB_SID=${DB_SID:-XEPDB1} \
-    DB_HTTP_PORT=${DB_HTTP_PORT:-8888}
+    DB_HTTP_PORT=${DB_HTTP_PORT:-8888} \
+    ORDS_HOME="/u01/ords" \
+    ORDS_CONF="/u01/config/ords"
 
 # Used when defining SMTP
 ENV SMTP_HOST_ADDRESS=${SMTP_HOST_ADDRESS} \
     SMTP_FROM=${SMTP_FROM} \
     SMTP_USERNAME=${SMTP_USERNAME} \
     SMTP_PASSWORD=${SMTP_PASSWORD} \
-    INTERNAL_MAIL=${INTERNAL_MAIL}
+    INTERNAL_MAIL=${INTERNAL_MAIL} \
+    PATH=${ORDS_HOME}/bin:${PATH} \
+    JAVA_OPTS="-Dconfig.url=${ORDS_CONF} -Xms1024M -Xmx1024M"
 
 # we use that for application server
 ENV ORDS_PASSWORD ${ORDS_PASSWORD:-secret}
