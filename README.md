@@ -1,6 +1,8 @@
 # Introduction
 
 [![APEX Community](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/78c5adbe/badges/apex-community-badge.svg)]() [![APEX Tool](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/b7e95341/badges/apex-tool-badge.svg)]() [![APEX Built with Love](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/7919f913/badges/apex-love-badge.svg)]()
+[![Works with ORDS 22.1^](https://img.shields.io/badge/Works%20with-ORDS%2022.1%5E-orange)]()
+
 
 With DOCKAWEX you can easily create your local APEX development environment consisting of Oracle Database 21c XE and Tomcat with ORDS. Your containers will be additionally secured via Let's Encrypt and nginx if you prefer when running on a virtual instance (ec2 or oci or droplet and so on).
 
