@@ -28,6 +28,22 @@ If you want to install the current patchset of Oracle APEX you have to download 
 ```bash
 export URL_APEX_PATCH=https://somewhere-out-there-where-you-can-place-some-file-temporaly.somewhere
 ```
+> **ATTENTION**: You have to upload the patchset in binary mode to your remote server. Otherwise unzip will not be able to extract the file
+
+### Install Patchset afterwards
+When you want to install the patchset after the main installation or if there is a new patchset available you can install by executing the following lines:
+
+```shell
+  # attach to running appsrv instance
+  docker exec -it local_appsrv_1 bash
+
+  # export the URL to download patchset from
+  export URL_APEX_PATCH=https://somewhere-out-there-where-you-can-place-some-file-temporaly.somewhere
+
+  # run install script
+  /scripts/patch_apex.sh
+
+```
 
 ## Local installation as development environment
 
