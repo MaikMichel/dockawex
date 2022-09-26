@@ -66,7 +66,9 @@ then
 
 fi
 
-source ${ENV_FILE}
+if [[ -f ${ENV_FILE} ]]; then
+  source ${ENV_FILE}
+fi
 
 new() {
 

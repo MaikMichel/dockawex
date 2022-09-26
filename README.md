@@ -1,6 +1,8 @@
 # Introduction
 
 [![APEX Community](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/78c5adbe/badges/apex-community-badge.svg)]() [![APEX Tool](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/b7e95341/badges/apex-tool-badge.svg)]() [![APEX Built with Love](https://cdn.rawgit.com/Dani3lSun/apex-github-badges/7919f913/badges/apex-love-badge.svg)]()
+[![Works with ORDS 22.1^](https://img.shields.io/badge/Works%20with-ORDS%2022.1%5E-orange)]()
+
 
 With DOCKAWEX you can easily create your local APEX development environment consisting of Oracle Database 21c XE and Tomcat with ORDS. Your containers will be additionally secured via Let's Encrypt and nginx if you prefer when running on a virtual instance (ec2 or oci or droplet and so on).
 
@@ -18,9 +20,9 @@ With DOCKAWEX you can easily create your local APEX development environment cons
 All tools will be downloaded during build. But you can change the Links in your environment file inside folder ```environments```. At the time of writing these lines the following packages are meant by that:
 
 ```bash
-  export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-21.3.1.301.2050.zip
-  export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
-  export URL_APEX=https://download.oracle.com/otn_software/apex/apex_21.2.zip
+  export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-22.1.1.133.1148.zip
+  export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.64/bin/apache-tomcat-9.0.64.tar.gz
+  export URL_APEX=https://download.oracle.com/otn_software/apex/apex_22.1.zip
 ```
 
 ### APEX Patchset
@@ -59,16 +61,16 @@ This will copy the templatefile to that place. Here you have to take care of the
 
 ```bash
 # URLs to get Installables
-export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-21.3.1.301.2050.zip
-export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.54/bin/apache-tomcat-9.0.54.tar.gz
-export URL_APEX=https://download.oracle.com/otn_software/apex/apex_21.2.zip
+export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-22.1.1.133.1148.zip
+export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.64/bin/apache-tomcat-9.0.64.tar.gz
+export URL_APEX=https://download.oracle.com/otn_software/apex/apex_22.1.zip
 
 # File for generic patch version, must be download from oracle support
 # and uploaded to a reachable url (ObjectStorage, S3, ...)
 export URL_APEX_PATCH=
 
 # if you want do not want to use a CDN you should comment that out
-# ex. https://static.oracle.com/cdn/apex/21.1.2/
+# ex. https://static.oracle.com/cdn/apex/22.1.0/
 export APEX_IMAGE_PREFIX=
 
 # Timezone
