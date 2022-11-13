@@ -24,6 +24,7 @@ if [ $# -lt 3 ]; then
   echo "    > stop   > stops services"
   echo "    > clear  > clears services"
   echo "    > exec   > calls compose only and attach params"
+  echo "    > ipatch > downloads and installs apex patchset"
   echo "    > new    > generates new environment file base on environment parameter"
   echo
   echo
@@ -173,6 +174,10 @@ exec_services() {
   ${COMPOSE_COMMAND} $OPTION
 }
 
+install_patch() {
+  ${COMPOSE_COMMAND} exec appsrv /scripts/patch_apex.sh
+}
+
 case ${COMMAND} in
   'build')
     build_images
@@ -210,6 +215,9 @@ case ${COMMAND} in
     ;;
   'nginx')
     writenginx
+    ;;
+  'ipatch')
+    install_patch
     ;;
   'new')
     new
