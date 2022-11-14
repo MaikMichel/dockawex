@@ -26,7 +26,7 @@ All tools will be downloaded during build. But you can change the Links in your 
 ```
 
 ### APEX Patchset
-If you want to install the current patchset of Oracle APEX you have to download it by your own https://support.oracle.com/epmos/faces/PatchDetail?patchId=32598392 and place it into a reachable URL:
+If you want to install the current patchset of Oracle APEX you have to download it by your own https://support.oracle.com/epmos/faces/PatchDetail?patchId=34020981 and place it into a reachable URL:
 ```bash
 export URL_APEX_PATCH=https://somewhere-out-there-where-you-can-place-some-file-temporaly.somewhere
 ```
