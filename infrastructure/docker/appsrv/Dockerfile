@@ -19,6 +19,7 @@ ENV DB_PASSWORD=${DB_PASSWORD:-secret} \
     DB_HOST=${DB_HOST:-localhost} \
     DB_PORT=${DB_PORT:-1521} \
     DB_SID=${DB_SID:-XEPDB1} \
+    DB_SID2=${DB_SID2:-XEPDB2} \
     DB_HTTP_PORT=${DB_HTTP_PORT:-8888} \
     ORDS_HOME="/u01/ords" \
     ORDS_CONF="/u01/config/ords"

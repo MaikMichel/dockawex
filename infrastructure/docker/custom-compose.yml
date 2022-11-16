@@ -48,3 +48,6 @@ services:
       - DDNS_URL=${DDNS_URL}
       # at least we route on slash to the following application-id
       - APP_NUM=${APP_NUM}
+      # configure xepdb2 to use as a second stage with given poolname
+      - USE_SECOND_PDB=${USE_SECOND_PDB}
+      - SECOND_POOL_NAME=${SECOND_POOL_NAME}

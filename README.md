@@ -90,6 +90,10 @@ export SMTP_FROM=
 export SMTP_USERNAME=
 export SMTP_PASSWORD=
 
+# generate and start a second pdb (xepdb2) for testing purpose using
+# SECOND_POOL_NAME to target by url: .../ords/build/f?p=
+export USE_SECOND_PDB=true
+export SECOND_POOL_NAME=build
 
 ####### Following stuff is only used when using remote configuration #######
 

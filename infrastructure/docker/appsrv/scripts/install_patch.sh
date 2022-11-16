@@ -2,6 +2,7 @@
 
 export SQLPLUS=sqlplus
 SQLPLUS_ARGS="sys/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_SID} as sysdba"
+SQLPLUS_ARGS2="sys/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_SID2} as sysdba"
 target_dir=/u01/apps
 FILE_APEX_PATCH=apex_patch.zip
 
@@ -46,11 +47,20 @@ apex_install(){
   if [ -f /files/$FILE_APEX_PATCH ]
   then
     cd ${target_dir}/apexpatch/*
-    echo "Installing Patch $FILE_APEX_PATCH"
+    echo "Installing Patch $FILE_APEX_PATCH on ${DB_SID}"
     $SQLPLUS -S $SQLPLUS_ARGS <<!
   @catpatch
 !
-  echo "-----------------------------------------------------------------"
+
+    echo "-----------------------------------------------------------------"
+    echo "Installing Patch $FILE_APEX_PATCH on ${DB_SID2}"
+    if [[ ${USE_SECOND_PDB,,} == "true" ]]; then
+      $SQLPLUS -S $SQLPLUS_ARGS2 <<!
+  @catpatch
+!
+
+    fi
+
   else
     echo "No Patch $FILE_APEX_PATCH found"
   fi

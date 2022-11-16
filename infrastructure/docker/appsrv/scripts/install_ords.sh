@@ -14,7 +14,7 @@ mkdir -p ${ORDS_CONF}/logs
 
 export ORDS_CONFIG=${ORDS_CONF}
 ${ORDS_HOME}/bin/ords --config ${ORDS_CONF} install \
-      --log-folder ${ORDS_CONF}/logs \
+      --log-folder ${ORDS_CONF}/${DB_SID}/logs \
       --admin-user SYS \
       --db-hostname ${DB_HOST} \
       --db-port ${DB_PORT} \
@@ -29,6 +29,27 @@ ${ORDS_HOME}/bin/ords --config ${ORDS_CONF} install \
 ${DB_PASSWORD}
 ${ORDS_PASSWORD}
 EOF
+
+if [[ ${USE_SECOND_PDB,,} == "true" ]]; then
+  ${ORDS_HOME}/bin/ords --config ${ORDS_CONF} install \
+        --log-folder ${ORDS_CONF}/${DB_SID2}/logs \
+        --db-pool ${SECOND_POOL_NAME,,} \
+        --admin-user SYS \
+        --db-hostname ${DB_HOST} \
+        --db-port ${DB_PORT} \
+        --db-servicename ${DB_SID2} \
+        --feature-db-api true \
+        --feature-rest-enabled-sql true \
+        --feature-sdw true \
+        --gateway-mode proxied \
+        --gateway-user APEX_PUBLIC_USER \
+        --proxy-user \
+        --password-stdin <<EOF
+  ${DB_PASSWORD}
+  ${ORDS_PASSWORD}
+EOF
+
+fi
 
   cp ords.war /tomcat/webapps/
   cp -rf ${target_dir}/apex/images /tomcat/webapps/i

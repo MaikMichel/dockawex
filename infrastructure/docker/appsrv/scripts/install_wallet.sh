@@ -3,6 +3,7 @@
 
 export SQLPLUS=sqlplus
 SQLPLUS_ARGS="sys/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_SID} as sysdba"
+SQLPLUS_ARGS2="sys/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_SID2} as sysdba"
 
 # Info
 # https://raw.githubusercontent.com/bnoordhuis/mozilla-central/master/toolkit/crashreporter/client/certdata2pem.py
@@ -120,6 +121,12 @@ set_apex_wallet_and_pwd() {
 
   #echo "EXIT" | ${ORACLE_HOME}/bin/sqlplus -s -l sys/${PASS} AS SYSDBA @set_apex_wallet
   echo "exit" | ${SQLPLUS} -L $SQLPLUS_ARGS @set_apex_wallet
+
+
+  if [[ ${USE_SECOND_PDB,,} == "true" ]]; then
+    echo "exit" | ${SQLPLUS} -L $SQLPLUS_ARGS2 @set_apex_wallet
+  fi
+
 }
 
 

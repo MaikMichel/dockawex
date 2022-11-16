@@ -25,6 +25,8 @@ services:
     environment:
         - DB_HOST=oradb
         - VIRTUAL_PORT=8080
+        - USE_SECOND_PDB=false
+        - SECOND_POOL_NAME=build
     ports:
       - 8080:8080
     volumes:

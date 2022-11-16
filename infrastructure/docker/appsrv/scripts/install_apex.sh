@@ -264,9 +264,29 @@ set_pwd_profile () {
 }
 
 
+generate_build_pdb(){
+  if [[ ${USE_SECOND_PDB,,} == "true" ]]; then
+    echo "Cloning xepdb1 to xepdb2"
+    $SQLPLUS -S $SQLPLUS_ARGS <<!
+    alter session set container=cdb\$root;
+
+    create pluggable database xepdb2 from xepdb1
+    file_name_convert=('/opt/oracle/oradata/XE/XEPDB1','/opt/oracle/oradata/XE/XEPDB2');
+
+    alter pluggable database xepdb2 open read write;
+
+    alter pluggable database xepdb2 save state;
+
+!
+
+  fi
+
+}
+
 verify
 unzip_apex
 create_apex_tablespace
 apex_install
 apex_config
 set_pwd_profile
+generate_build_pdb
