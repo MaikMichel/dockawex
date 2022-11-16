@@ -1,5 +1,7 @@
 # Changelog
 
+## 2022-11-16
+- modified default links to point to lastest ORDS and APEX 22.2 and Tomcat 9.0.68
 ## 2020-05-05
 
 - Portainer removed
