@@ -7,8 +7,8 @@ echo "should we ddns? "
 if [[ -z "$DDNS_URL" ]]; then
   echo "DDNS not set"
 else
-  echo "http://${DDNS_USER}:${DDNS_PASSWORD}@${DDNS_URL}"
-  curl http://${DDNS_USER}:${DDNS_PASSWORD}@${DDNS_URL}/ > /dev/null
+  echo "https://${DDNS_USER}:${DDNS_PASSWORD}@${DDNS_URL}"
+  curl https://${DDNS_USER}:${DDNS_PASSWORD}@${DDNS_URL}/ > /dev/null
 fi
 
 
