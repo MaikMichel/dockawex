@@ -175,7 +175,7 @@ exec_services() {
 }
 
 install_patch() {
-  ${COMPOSE_COMMAND} exec appsrv /scripts/patch_apex.sh
+  ${COMPOSE_COMMAND} exec appsrv "./scripts/patch_apex.sh" "${OPTION}"
 }
 
 case ${COMMAND} in

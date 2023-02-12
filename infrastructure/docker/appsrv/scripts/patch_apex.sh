@@ -1,17 +1,37 @@
 #!/bin/bash
+
+
 target_dir=/u01/apps
+URL_APEX_PATCH=${1}
+
 FILE_APEX_PATCH=apex_patch.zip
 export SQLPLUS=sqlplus
 SQLPLUS_ARGS="sys/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_SID} as sysdba"
 SQLPLUS_ARGS2="sys/${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_SID2} as sysdba"
 
-exec >> >(tee -ai /docker_log.txt)
-exec 2>&1
+
+# exec >> >(tee -ai /docker_log.txt)
+# exec 2>&1
 
 if [ -z ${URL_APEX_PATCH} ]; then
-  echo "no URL to download"
+  echo "No Patch URL to download"
   exit 1
 fi
+
+# is URL valid?
+regex='(https)://[-[:alnum:]\+&@#/%?=~_|!:,.;]*[-[:alnum:]\+&@#/%=~_|]'
+if [[ ! ${URL_APEX_PATCH} =~ $regex ]]
+then
+    echo "Invalid Patch URL: ${URL_APEX_PATCH}"
+fi
+
+# is URL reachable
+if curl --output /dev/null --silent --head --fail "${URL_APEX_PATCH}"; then
+  echo "Patch URL exists: ${URL_APEX_PATCH}"
+else
+  echo "Patch URL does not exist: ${URL_APEX_PATCH}"
+fi
+
 
 # removeFile
 rm -rf /files/${FILE_APEX_PATCH}
@@ -37,13 +57,15 @@ then
   unzip -q /files/$FILE_APEX_PATCH -d ${target_dir}/apexpatch/
 
   cd ${target_dir}/apexpatch/*
-  echo "Installing Patch $FILE_APEX_PATCH on ${DB_SID}"
+
+  line=$(head -n 1 README.txt)
+  echo "Installing Patch ${line} on ${DB_SID}"
   $SQLPLUS -S $SQLPLUS_ARGS <<!
   @catpatch
 !
 
   if [[ ${USE_SECOND_PDB,,} == "true" ]]; then
-    echo "Installing Patch $FILE_APEX_PATCH on ${DB_SID2}"
+    echo "Installing Patch ${line} on ${DB_SID2}"
     $SQLPLUS -S $SQLPLUS_ARGS <<!
   @catpatch
 !
@@ -59,4 +81,4 @@ else
 fi
 
 
-echo "Done, installing patch $FILE_APEX_PATCH"
+echo "Done, installing patch: ${line}"
