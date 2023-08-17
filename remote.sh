@@ -24,7 +24,9 @@ if [ $# -lt 3 ]; then
   echo "    > stop   > stops services"
   echo "    > clear  > clears services"
   echo "    > exec   > calls compose only and attach params"
-  echo "    > ipatch > downloads and installs apex patchset"
+  echo "    > ipatch > downloads and installs apex patchset from given argument,"
+  echo "               which in fact has to be the URL pointing to the public URL "
+  echo "               where you placed the patchset file"
   echo "    > new    > generates new environment file base on environment parameter"
   echo
   echo
