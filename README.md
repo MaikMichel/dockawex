@@ -89,6 +89,9 @@ export SMTP_PASSWORD=
 export USE_SECOND_PDB=true
 export SECOND_POOL_NAME=build
 
+# Start AOP service
+export AOP_SERVICE=true
+
 ####### Following stuff is only used when using remote configuration #######
 
 # Point to and certificate
@@ -154,6 +157,8 @@ apex_mail.send(p_from => '${SMTP_FROM}'
 | APEX             | http://localhost:8080/ords                |
 | SQLDeveloper Web | http://localhost:8080/ords/sql-developer  |
 | DB               | \<user>/\<pass>@localhost:1521/xepdb1     |
+| DB               | \<user>/\<pass>@localhost:1521/xepdb2     |
+| AOP              | http://localhost:8080                     |
 
 
 
@@ -256,6 +261,14 @@ Check https://your-sub.domain.de/ords APEX is waiting ..
   ```
   After that you can publish RESTful Service, REST Enable object and login SQL Developer Web. You can switch that off by editing infrastructure/docker/appsrv/scripts/ords_params.properties.
 
+3. How can I license the included AOP?
+> Here you have to follow the instructions, visible at: https://www.apexofficeprint.com/docs/
+
+
+> You can execute any command by just bashing into the underlying contanier:
+```bash
+  ./remote.sh dev environments/local.env exec "aop bash"
+```
 
 ---
 # Credits

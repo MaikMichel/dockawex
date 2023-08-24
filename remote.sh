@@ -53,6 +53,7 @@ else
   COMPOSE_COMMAND="docker-compose -p ${CONTAINER_PREFIX} -f ${INFRA_PATH}/docker/docker-compose.yml -f ${INFRA_PATH}/docker/custom-compose.yml"
 fi
 
+
 if [ ! -f "${ENV_FILE}" ]
 then
   echo "Environment-File: ${ENV_FILE} not found"
@@ -71,6 +72,10 @@ fi
 
 if [[ -f ${ENV_FILE} ]]; then
   source ${ENV_FILE}
+fi
+
+if [[ "${AOP_SERVICE}" == "true" ]]; then
+  COMPOSE_COMMAND+=" -f ${INFRA_PATH}/docker/aop-compose.yml"
 fi
 
 new() {
@@ -133,11 +138,11 @@ list_services() {
 
 renew_certificate() {
   # renew cert
-  ${COMPOSE_COMMAND} exec letsencrypt-nginx-proxy ./force_renew
+  ${COMPOSE_COMMAND} exec letsencrypt ./force_renew
 }
 
 writenginx() {
-  ${COMPOSE_COMMAND} restart nginx-proxy
+  ${COMPOSE_COMMAND} restart nginx
 }
 
 
@@ -173,7 +178,7 @@ stop_services() {
 }
 
 exec_services() {
-  ${COMPOSE_COMMAND} $OPTION
+  ${COMPOSE_COMMAND} exec ${OPTION}
 }
 
 install_patch() {

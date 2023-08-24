@@ -5,16 +5,16 @@ version: '3.7'
 # proxy them when ENVs are defined and let them certify
 # by letsencrypt
 services:
-  appsrv:    
+  appsrv:
     volumes:
       - vhostvol:/etc/nginx/vhost.d
       - confdvol:/etc/nginx/conf.d
 
-  nginx-proxy:
+  nginx:
     image: jwilder/nginx-proxy:alpine
     labels:
         com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-    container_name: nginx-proxy
+    container_name: ${CONTAINER_PREFIX}_nginx
     depends_on:
       - appsrv
     ports:
@@ -28,11 +28,11 @@ services:
       - '/var/run/docker.sock:/tmp/docker.sock:ro'
     restart: always
 
-  letsencrypt-nginx-proxy:
+  letsencrypt:
     image: 'jrcs/letsencrypt-nginx-proxy-companion'
-    container_name: letsencrypt-nginx-proxy
+    container_name: ${CONTAINER_PREFIX}_letsencrypt
     depends_on:
-      - nginx-proxy
+      - nginx
     volumes:
       - vhostvol:/etc/nginx/vhost.d
       - htmlvol:/usr/share/nginx/html
