@@ -6,7 +6,7 @@ LABEL maintainer="maik.michel@die21.de"
 #microdnf install -y python38 python3-pip python3-setuptools && \
 #microdnf module enable python38 && \
 RUN set -x && microdnf install -y unzip tar gzip freetype fontconfig ncurses openssl \
-shadow-utils glibc-locale-source glibc-langpack-de java-17-openjdk \
+shadow-utils glibc-locale-source glibc-langpack-de java-17-openjdk java-17-openjdk-devel \
 oracle-instantclient-release-el8 python3 && \
 microdnf update -y && \
 microdnf install oracle-instantclient-basic oracle-instantclient-sqlplus && \
