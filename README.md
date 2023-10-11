@@ -54,9 +54,9 @@ This will copy the templatefile to that place. Here you have to take care of the
 
 ```bash
 # URLs to get Installables
-export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-22.1.1.133.1148.zip
-export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.64/bin/apache-tomcat-9.0.64.tar.gz
-export URL_APEX=https://download.oracle.com/otn_software/apex/apex_22.1.zip
+export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-latest.zip
+export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.78/bin/apache-tomcat-9.0.78.tar.gz
+export URL_APEX=https://download.oracle.com/otn_software/apex/apex_23.1_en.zip
 
 # File for generic patch version, must be download from oracle support
 # and uploaded to a reachable url (ObjectStorage, S3, ...)
