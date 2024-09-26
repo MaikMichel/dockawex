@@ -20,9 +20,9 @@ With DOCKAWEX you can easily create your local APEX development environment cons
 All tools will be downloaded during build. But you can change the Links in your environment file inside folder ```environments```. At the time of writing these lines the following packages are meant by that:
 
 ```bash
-  export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-latest.zip
-  export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.68/bin/apache-tomcat-9.0.68.tar.gz
-  export URL_APEX=https://download.oracle.com/otn_software/apex/apex_22.2.zip
+export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-latest.zip
+export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.78/bin/apache-tomcat-9.0.78.tar.gz
+export URL_APEX=https://download.oracle.com/otn_software/apex/apex_23.1_en.zip
 ```
 
 ### APEX Patchset
@@ -36,14 +36,7 @@ export URL_APEX_PATCH=https://somewhere-out-there-where-you-can-place-some-file-
 When you want to install the patchset after the main installation or if there is a new patchset available you can install by executing the following lines:
 
 ```shell
-  # attach to running appsrv instance
-  docker exec -it local_appsrv_1 bash
-
-  # export the URL to download patchset from
-  export URL_APEX_PATCH=https://somewhere-out-there-where-you-can-place-some-file-temporaly.somewhere
-
-  # run install script
-  /scripts/patch_apex.sh
+  ./remote.sh mode enironment.file ipatch "https://somewhere-out-there-where-you-can-place-some-file-temporaly.somewhere"
 
 ```
 
@@ -61,16 +54,17 @@ This will copy the templatefile to that place. Here you have to take care of the
 
 ```bash
 # URLs to get Installables
-export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-22.1.1.133.1148.zip
-export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.64/bin/apache-tomcat-9.0.64.tar.gz
-export URL_APEX=https://download.oracle.com/otn_software/apex/apex_22.1.zip
+export URL_ORDS=https://download.oracle.com/otn_software/java/ords/ords-latest.zip
+export URL_TOMCAT=https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.78/bin/apache-tomcat-9.0.78.tar.gz
+export URL_APEX=https://download.oracle.com/otn_software/apex/apex_23.1_en.zip
 
 # File for generic patch version, must be download from oracle support
 # and uploaded to a reachable url (ObjectStorage, S3, ...)
 export URL_APEX_PATCH=
 
 # if you want do not want to use a CDN you should comment that out
-# ex. https://static.oracle.com/cdn/apex/22.1.0/
+# keep in mind that URL could change during upgrade
+# ex. https://static.oracle.com/cdn/apex/23.1.0/
 export APEX_IMAGE_PREFIX=
 
 # Timezone
@@ -94,6 +88,9 @@ export SMTP_PASSWORD=
 # SECOND_POOL_NAME to target by url: .../ords/build/f?p=
 export USE_SECOND_PDB=true
 export SECOND_POOL_NAME=build
+
+# Start AOP service
+export AOP_SERVICE=true
 
 ####### Following stuff is only used when using remote configuration #######
 
@@ -160,6 +157,8 @@ apex_mail.send(p_from => '${SMTP_FROM}'
 | APEX             | http://localhost:8080/ords                |
 | SQLDeveloper Web | http://localhost:8080/ords/sql-developer  |
 | DB               | \<user>/\<pass>@localhost:1521/xepdb1     |
+| DB               | \<user>/\<pass>@localhost:1521/xepdb2     |
+| AOP              | http://localhost:8080                     |
 
 
 
@@ -262,6 +261,14 @@ Check https://your-sub.domain.de/ords APEX is waiting ..
   ```
   After that you can publish RESTful Service, REST Enable object and login SQL Developer Web. You can switch that off by editing infrastructure/docker/appsrv/scripts/ords_params.properties.
 
+3. How can I license the included AOP?
+> Here you have to follow the instructions, visible at: https://www.apexofficeprint.com/docs/
+
+
+> You can execute any command by just bashing into the underlying contanier:
+```bash
+  ./remote.sh dev environments/local.env exec "aop bash"
+```
 
 ---
 # Credits

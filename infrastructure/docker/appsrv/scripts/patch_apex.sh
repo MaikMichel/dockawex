@@ -66,7 +66,7 @@ then
 
   if [[ ${USE_SECOND_PDB,,} == "true" ]]; then
     echo "Installing Patch ${line} on ${DB_SID2}"
-    $SQLPLUS -S $SQLPLUS_ARGS <<!
+    $SQLPLUS -S $SQLPLUS_ARGS2 <<!
   @catpatch
 !
 

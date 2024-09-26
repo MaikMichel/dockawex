@@ -5,7 +5,7 @@ version: '3.7'
 # and define some user data
 services:
   oradb:
-    container_name: ${CONTAINER_PREFIX}_oradb_1
+    container_name: ${CONTAINER_PREFIX}_oradb
     environment:
       - TZ=${TIME_ZONE}
       - ORACLE_PASSWORD=${DB_PASSWORD}
@@ -20,7 +20,7 @@ services:
         - APEX_IMAGE_PREFIX=${APEX_IMAGE_PREFIX}
         # Pwd used in tomcat
         - TOM_PASSWORD=${TOM_PASSWORD}
-    container_name: ${CONTAINER_PREFIX}_appsrv_1
+    container_name: ${CONTAINER_PREFIX}_appsrv
     environment:
       # this is used for sys
       - DB_PASSWORD=${DB_PASSWORD}

@@ -1,0 +1,35 @@
+# DOCKAWEX services
+version: '3.7'
+
+services:
+  # Official latest AOP Version
+  aop:
+    image: apexrnd/apexofficeprint
+    container_name: ${CONTAINER_PREFIX}_aop
+    # mem_limit: 2g
+    ports:
+      - 8010:8010
+    restart: always
+    depends_on:
+      - oradb
+
+    entrypoint:
+      - /APEXOfficePrint/APEXOfficePrintLinux64
+      - -s
+      - /apexofficeprintstartup
+
+    healthcheck:
+      test: curl --fail -s http://localhost:8010/ || exit 1
+      interval: 5m
+      timeout: 30s
+      retries: 10
+      start_period: 15m
+
+    volumes:
+      - apexofficeprint:/apexofficeprintstartup
+
+
+# Define some volumes
+volumes:
+  apexofficeprint:
+    driver: local
